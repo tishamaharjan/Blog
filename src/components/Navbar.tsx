@@ -1,6 +1,6 @@
 const Navbar = () => {
   const elements = [
-    { link: "/", name: "Home" },
+    { link: "/home", name: "Home" },
     { link: "/blog", name: "MyBlogs" },
     { link: "/profile", name: "Profile" },
   ];
@@ -14,7 +14,7 @@ const Navbar = () => {
           </a>
         ))}
       </div>
-      <a href="/login" className="ml-auto text-white/80">
+      <a href="/" className="ml-auto text-white/80">
         Logout
       </a>
     </div>
