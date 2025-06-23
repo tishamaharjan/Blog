@@ -9,7 +9,7 @@ const Login = () => {
   return (
     <div className="flex flex-col justify-center text-center">
       Login
-      <div className="flex flex-col  mt-5">
+      <div className="flex flex-col mt-5">
         <form
           onSubmit={onSubmit}
           className="bg-[#EAEFEF] border-2 w-1/3 mx-auto p-5 rounded-[10px]"
