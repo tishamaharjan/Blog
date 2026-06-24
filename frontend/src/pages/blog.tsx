@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import AddButton from "../components/button/AddButton";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -6,13 +7,12 @@ const Blog = () => {
     navigate("/addblog");
   };
   return (
-    <div className="flex flex-col justify-center">
-      <button
-        className="bg-[#819A91] rounded-2xl p-2 cursor-pointer ml-auto mr-2"
+    <div className="flex justify-left">
+      <AddButton
+        text="Add Blog"
+        className="cursor-pointer ml-auto w-fit"
         onClick={onAddBlog}
-      >
-        +Add Blog
-      </button>
+      />
     </div>
   );
 };

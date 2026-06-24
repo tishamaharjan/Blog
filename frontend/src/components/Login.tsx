@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import LoginButton from "./button/LoginButton";
 
 type FormData = {
   email: string;
@@ -91,12 +92,7 @@ const Login = () => {
               <span className="text-red-500 text-xs">Password is required</span>
             )}
           </>
-          <button
-            type="submit"
-            className="bg-[#A7C1A8] text-white p-1 rounded-[5px] mt-3 w-full cursor-pointer"
-          >
-            Login
-          </button>
+          <LoginButton text="Login" />
         </form>
         <a href="/register" className="mt-3 underline text-[#A7C1A8]">
           Register user? Click here.
