@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import AddButton from "../components/button/AddButton";
 
 const AddBlog = () => {
   const [id, setId] = useState(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
+
+  useEffect(() => {
+    const keys = Object.keys(localStorage)
+      .filter((key) => key.startsWith("blog_"))
+      .map((key) => Number(key.replace("blog_", "")));
+    const lastId = keys.length > 0 ? Math.max(...keys) : 0;
+    setId(lastId + 1);
+  }, []);
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!image) return;
 
     const reader = new FileReader();
-
     reader.readAsDataURL(image);
     reader.onloadend = () => {
       const base64Image = reader.result as string;
@@ -21,12 +30,14 @@ const AddBlog = () => {
         description,
         image: base64Image,
       };
+
       localStorage.setItem("blog_" + id, JSON.stringify(blog));
 
-      setId(0);
       setTitle("");
       setDescription("");
       setImage(null);
+
+      setId((prev) => prev + 1);
     };
   };
   return (
@@ -41,6 +52,7 @@ const AddBlog = () => {
           className="border-1 rounded-[5px] w-[95%] bg-[#e9efe0]"
           type="number"
           value={id}
+          readOnly
           onChange={(e) => setId(Number(e.target.value))}
           required
         />
@@ -66,12 +78,7 @@ const AddBlog = () => {
           onChange={(e) => setImage(e.target.files?.[0] ?? null)}
           required
         />
-        <button
-          type="submit"
-          className="bg-[#A7C1A8] mx-auto w-[50%] text-white p-1 rounded-[5px] mt-3 cursor-pointer"
-        >
-          Add
-        </button>
+        <AddButton text="Add Blog" className="w-full" />
       </form>
     </div>
   );

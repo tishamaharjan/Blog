@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import LoginButton from "./button/LoginButton";
 
 type FormData = {
   username: string;
@@ -43,25 +44,15 @@ const Register = () => {
   const navigate = useNavigate();
   const onSubmit = (data: FormData) => {
     try {
-      const result = schema.safeParse({
-        username: data.username,
-        email: data.email,
-        password: data.password,
-      });
-      if (!result.success) {
-        result.error.issues.map((issue) => console.log(issue.message));
-        alert("Invalid email or password");
-      } else {
-        localStorage.setItem(
-          "user_" + data.email,
-          JSON.stringify({
-            username: data.username,
-            email: data.email,
-            password: data.password,
-          })
-        );
-        navigate("/");
-      }
+      localStorage.setItem(
+        "user_" + data.email,
+        JSON.stringify({
+          username: data.username,
+          email: data.email,
+          password: data.password,
+        }),
+      );
+      navigate("/");
     } catch (e) {
       console.log(e);
     }
@@ -150,14 +141,7 @@ const Register = () => {
             )}
           </>
 
-          <>
-            <button
-              type="submit"
-              className="bg-[#A7C1A8] text-white p-1 rounded-[5px] mt-3 w-full cursor-pointer"
-            >
-              Register
-            </button>
-          </>
+          <LoginButton text="Register" />
         </form>
         <a href="/" className="mt-3 underline text-[#A7C1A8]">
           To login Click here.

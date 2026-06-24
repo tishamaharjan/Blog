@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ProfileCard from "../components/ProfileCard";
 
 type User = {
   username: string;
@@ -33,12 +34,13 @@ const Profile = () => {
   }, []);
   return (
     <div>
-      Profile
-      {userDetails.map((users, index) => (
-        <div key={index}>
-          <h1>Username: {users.username}</h1>
-          <h1>Email: {users.email}</h1>
-        </div>
+      {userDetails.map((user, index) => (
+        <ProfileCard
+          key={index}
+          username={user.username}
+          email={user.email}
+          index={index}
+        />
       ))}
     </div>
   );
