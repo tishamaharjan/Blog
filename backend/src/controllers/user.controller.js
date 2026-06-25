@@ -12,7 +12,7 @@ const UserSchema = z.object({
   password: z.string().min(8),
   profileImage: z.string().optional(),
 });
-// asdfgh;
+
 export async function registerUserController(req, res) {
   const parsed = UserSchema.safeParse(req.body);
   const user = createUserModel(parsed.data);
