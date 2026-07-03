@@ -30,7 +30,9 @@ export async function registerUserController(req, res) {
       message: "User registered successfully.",
       data: result,
     });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    res.status(err.status || 500).json({
+      message: err.message || "Internal Server Error",
+    });
   }
 }
