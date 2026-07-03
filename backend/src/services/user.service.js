@@ -22,13 +22,10 @@ export async function registerUser(user) {
       email: user.email,
     };
   } catch (e) {
-    // MSSQL unique constraint violation codes
-    // Duplicate key / unique constraint violation
     if (e.number === 2627 || e.number === 2601) {
-      throw {
-        status: 409,
-        message: "Email already registered.",
-      };
+      const error = new Error("Email already registered.");
+      error.status = 409;
+      throw error;
     }
 
     throw e;
