@@ -15,7 +15,6 @@ const UserSchema = z.object({
 
 export async function registerUserController(req, res) {
   const parsed = UserSchema.safeParse(req.body);
-  const user = createUserModel(parsed.data);
 
   if (!parsed.success) {
     return res.status(400).json({
@@ -24,6 +23,7 @@ export async function registerUserController(req, res) {
   }
 
   try {
+    const user = createUserModel(parsed.data);
     const result = await registerUser(user);
 
     return res.status(201).json({
@@ -31,6 +31,7 @@ export async function registerUserController(req, res) {
       data: result,
     });
   } catch (err) {
+    console.error(err);
     res.status(err.status || 500).json({
       message: err.message || "Internal Server Error",
     });
