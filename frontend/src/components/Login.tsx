@@ -4,6 +4,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import LoginButton from "./button/LoginButton";
+import { authApi } from "../api";
 
 type FormData = {
   email: string;
@@ -12,6 +13,8 @@ type FormData = {
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const {
     register,
@@ -20,30 +23,44 @@ const Login = () => {
   } = useForm<FormData>();
 
   const navigate = useNavigate();
-  const onSubmit = (data: FormData) => {
-    try {
-      const userKey = `user_${data.email}`;
-      const userDetails = localStorage.getItem(userKey);
 
-      if (!userDetails) {
-        alert("User not registered.");
-      } else {
-        if (userDetails) {
-          const user = JSON.parse(userDetails);
-          if (user.password === data.password && user.email === data.email) {
-            navigate("/home");
-          } else if (user.password !== data.password) {
-            alert("Invalid  password");
-          } else if (user.email !== data.email) {
-            alert("Invalid  email");
-          } else {
-            alert("Invalid email or password");
-          }
-        }
-      }
+  const onSubmit = async (data: FormData) => {
+    setApiError(null);
+    setIsSubmitting(true);
+    try {
+      const response = await authApi.login({
+        email: data.email,
+        password: data.password,
+      });
+      // localStorage.setItem("token", response.token);
+      console.log("response login", response);
+
+      navigate("/home");
+
+      // if (!userDetails) {
+      //   alert("User not registered.");
+      // } else {
+      //   if (userDetails) {
+      //     const user = JSON.parse(userDetails);
+      //     if (user.password === data.password && user.email === data.email) {
+      //       navigate("/home");
+      //     } else if (user.password !== data.password) {
+      //       alert("Invalid  password");
+      //     } else if (user.email !== data.email) {
+      //       alert("Invalid  email");
+      //     } else {
+      //       alert("Invalid email or password");
+      //     }
+      //   }
+      // }
     } catch (error) {
+      setApiError(
+        error instanceof Error ? error.message : "Invalid email or password",
+      );
       console.log(error);
       alert("Invalid email or password");
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -92,7 +109,9 @@ const Login = () => {
               <span className="text-red-500 text-xs">Password is required</span>
             )}
           </>
-          <LoginButton text="Login" />
+
+          {apiError && <span className="text-red-500 text-xs">{apiError}</span>}
+          <LoginButton text={isSubmitting ? "Logging in..." : "Login"} />
         </form>
         <a href="/register" className="mt-3 underline text-[#A7C1A8]">
           Register user? Click here.
