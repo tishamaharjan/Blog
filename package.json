@@ -1,13 +1,11 @@
 {
-	"dependencies": {
-		"@fortawesome/fontawesome-svg-core": "^6.7.2",
-		"@fortawesome/free-solid-svg-icons": "^6.7.2",
-		"@fortawesome/react-fontawesome": "^0.2.2",
-		"cors": "^2.8.5",
-		"express": "^5.1.0",
-		"font-awesome": "^4.7.0",
-		"nodemon": "^3.1.10",
-		"react-hook-form": "^7.60.0",
-		"zod": "^4.0.5"
-	}
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.8"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "lint:frontend": "pnpm --dir frontend lint",
+    "lint:backend": "pnpm --dir backend typecheck"
+  }
 }
