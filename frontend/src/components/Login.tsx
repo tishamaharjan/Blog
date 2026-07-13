@@ -32,27 +32,9 @@ const Login = () => {
         email: data.email,
         password: data.password,
       });
-      // localStorage.setItem("token", response.token);
       console.log("response login", response);
 
       navigate("/home");
-
-      // if (!userDetails) {
-      //   alert("User not registered.");
-      // } else {
-      //   if (userDetails) {
-      //     const user = JSON.parse(userDetails);
-      //     if (user.password === data.password && user.email === data.email) {
-      //       navigate("/home");
-      //     } else if (user.password !== data.password) {
-      //       alert("Invalid  password");
-      //     } else if (user.email !== data.email) {
-      //       alert("Invalid  email");
-      //     } else {
-      //       alert("Invalid email or password");
-      //     }
-      //   }
-      // }
     } catch (error) {
       setApiError(
         error instanceof Error ? error.message : "Invalid email or password",
@@ -69,7 +51,7 @@ const Login = () => {
       <div className="flex flex-col mt-5">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-[#EAEFEF] flex flex-col gap-1 border-2 w-1/3 mx-auto p-5 rounded-[10px]"
+          className="bg-[#EAEFEF] flex flex-col gap-1 border-2 md:w-1/3 mx-auto p-5 rounded-[10px]"
         >
           <>
             <label>Email:</label>

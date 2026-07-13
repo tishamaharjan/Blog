@@ -66,7 +66,6 @@ const Register = () => {
         profileImage: data.profileImage,
         password: data.password,
       });
-      // localStorage.setItem("token", response.token);
       console.log("response", response);
 
       navigate("/");
@@ -77,13 +76,14 @@ const Register = () => {
       setIsSubmitting(false);
     }
   };
+  // width must be adjusted
   return (
     <div className="flex flex-col justify-center text-center">
       Register
       <div className="flex flex-col mt-5">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-[#EAEFEF] flex flex-col gap-1 border-2  mx-auto p-5 rounded-[10px]"
+          className="bg-[#EAEFEF] flex flex-col gap-1 border-2 md:w-1/3  mx-auto p-5 rounded-[10px]"
         >
           <>
             <label>Username:</label>

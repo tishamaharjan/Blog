@@ -8,6 +8,7 @@ export async function apiClient<T>(
   console.log("log", BASE_URL);
 
   const res = await fetch(`${BASE_URL}${endpoint}`, {
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(token && { Authorization: `Bearer ${token}` }),
