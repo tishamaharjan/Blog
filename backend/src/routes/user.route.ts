@@ -8,7 +8,7 @@ import {
 } from "../controllers/user.controller.js";
 import rateLimit from "express-rate-limit";
 
-const router: Router = express.Router();
+const router: Router = Router();
 
 const registerLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
