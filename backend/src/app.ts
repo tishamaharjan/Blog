@@ -7,6 +7,8 @@ import { errorHandler, notFoundHandler } from "./middleware/errorHandler.js";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import blogRoutes from "./routes/blog.route.js";
+import commentRoutes from "./routes/comment.route.js";
+import likeRoutes from "./routes/like.route.js";
 
 const app = express();
 app.use(
@@ -22,6 +24,8 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/likes", likeRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
