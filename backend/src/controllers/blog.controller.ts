@@ -9,6 +9,7 @@ import {
 import {
   addBlog,
   deleteBlog,
+  getAllBlogs,
   getBlogById,
   updateBlog,
 } from "../services/blog.service.js";
@@ -74,6 +75,17 @@ export const getBlogByIdController = asyncHandler(
 
     return res.status(200).json({
       message: "Blog fetched successfully.",
+      data: result,
+    });
+  },
+);
+
+export const getAllBlogsController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const result = await getAllBlogs();
+
+    return res.status(200).json({
+      message: "Blogs fetched successfully.",
       data: result,
     });
   },

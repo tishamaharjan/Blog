@@ -42,6 +42,14 @@ export async function getBlogById(blog: GetBlog) {
   return result.recordset[0];
 }
 
+export async function getAllBlogs() {
+  const pool = getDB();
+
+  const result = await pool.request().execute("GetAllBlog");
+
+  return result.recordset;
+}
+
 export async function updateBlog(blog: UpdateBlogs) {
   try {
     const pool = getDB();
