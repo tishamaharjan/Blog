@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import LoginButton from "./button/LoginButton";
-import { authApi } from "../api";
+import LoginButton from "../button/LoginButton";
+import { authApi } from "../../api";
 
 type FormData = {
   username: string;
