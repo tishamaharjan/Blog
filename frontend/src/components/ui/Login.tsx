@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import LoginButton from "./button/LoginButton";
-import { authApi } from "../api";
+import LoginButton from "../button/LoginButton";
+import { authApi } from "../../api";
 
 type FormData = {
   email: string;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ProfileCard from "../components/ProfileCard";
+import ProfileCard from "../components/ui/ProfileCard";
 
 type User = {
   username: string;
@@ -8,40 +8,57 @@ type User = {
 };
 
 const Profile = () => {
-  const [userDetails, setUserDetails] = useState<User[]>([]);
+  const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   useEffect(() => {
-    const users = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-      const stringKey = localStorage.key(i);
-      if (!stringKey?.startsWith("user_")) {
-        continue;
-      }
-      const value = localStorage.getItem(stringKey);
-
+    const getUser = async () => {
       try {
-        if (!value) {
-          continue;
-        }
-        const data = JSON.parse(value);
-        users.push(data);
-      } catch (e) {
-        console.log(e);
-      }
+        const userId = localStorage.getItem("userId");
 
-      setUserDetails(users);
-    }
+        if (!userId) {
+          setError("User ID not found");
+          return;
+        }
+
+        const response = await fetch(
+          `http://localhost:3000/api/users/${userId}`,
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch user");
+        }
+
+        const result = await response.json();
+
+        setUserDetails(result.data);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to load user details");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUser();
   }, []);
+
+  if (loading) {
+    return <div>Loading profile...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!userDetails) {
+    return <div>User not found</div>;
+  }
+
   return (
     <div>
-      {userDetails.map((user, index) => (
-        <ProfileCard
-          key={index}
-          username={user.username}
-          email={user.email}
-          index={index}
-        />
-      ))}
+      <ProfileCard username={userDetails.username} email={userDetails.email} />
     </div>
   );
 };
