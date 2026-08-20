@@ -1,44 +1,69 @@
 import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
+
 type Blog = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
+  BlogID: number;
+  UserID: number;
+  BlogDetail: string;
+  BlogImage: string;
 };
+
+type BlogResponse = {
+  success: boolean;
+  data: Blog[];
+};
+
 const Home = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
   useEffect(() => {
-    const allBlogs = [];
-
-    for (let i = 0; i < localStorage.length; i++) {
-      const stringkey = localStorage.key(i);
-      if (!stringkey?.startsWith("blog")) {
-        continue;
-      }
-      const value = localStorage.getItem(stringkey);
-
+    const getAllBlogs = async () => {
       try {
-        if (!value) {
-          continue;
-        }
-        const data = JSON.parse(value);
-        allBlogs.push(data);
-      } catch (e) {
-        console.log(e);
-      }
+        const response = await fetch(
+          "http://localhost:3000/api/blogs/get-all-blogs",
+        );
 
-      setBlogs(allBlogs);
-    }
+        if (!response.ok) {
+          throw new Error("Failed to fetch blogs");
+        }
+
+        const result: BlogResponse = await response.json();
+
+        setBlogs(result.data);
+      } catch (error) {
+        console.error(error);
+        setError("Failed to load blogs");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getAllBlogs();
   }, []);
+
+  if (loading) {
+    return <div>Loading blogs...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
-    <div className="flex p-5 gap-8 justify-center flex-wrap">
-      {blogs.map((blog, index) => (
-        <BlogCard key={index}>
-          <h1>Blog Number: {blog.id}</h1>
-          <h1>Blog is about: {blog.title}</h1>
-          <p>{blog.description}</p>
-          {blog.image && <img src={blog.image} className="rounded-[10px]" />}
+    <div>
+      {blogs.map((blog) => (
+        <BlogCard key={blog.BlogID}>
+          <div>
+            <p>Blog Number: {blog.BlogID}</p>
+
+            <p>Blog is about: {blog.BlogDetail}</p>
+
+            {blog.BlogImage && (
+              <img src={blog.BlogImage} alt={blog.BlogDetail} />
+            )}
+          </div>
         </BlogCard>
       ))}
     </div>

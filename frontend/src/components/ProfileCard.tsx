@@ -1,7 +1,6 @@
 type Props = {
   username: string;
   email: string;
-  index: number;
 };
 
 const ProfileCard = ({ username, email }: Props) => {
