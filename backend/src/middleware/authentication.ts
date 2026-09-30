@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { verifyToken, type TokenPayload } from "../utils/jwt.js";
 import { AppError } from "../utils/AppError.js";
 
@@ -8,17 +8,17 @@ interface AuthenticatedRequest extends Request {
 
 export function requireAuth(
   req: AuthenticatedRequest,
-  res: Response,
+  _res: Response,
   next: NextFunction,
-): void | Response {
-  const token = req.cookies.token;
+): void {
+  const token = req.cookies?.token as string | undefined;
 
   if (!token) {
     return next(new AppError("Not authenticated.", 401));
   }
 
   try {
-    req.user = verifyToken(token) as TokenPayload;
+    req.user = verifyToken(token);
     next();
   } catch (e) {
     next(e);

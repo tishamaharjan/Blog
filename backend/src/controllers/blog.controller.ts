@@ -1,11 +1,7 @@
 import { z } from "zod";
-import { asyncHandler } from "../utils/asyncHandler.js";
 import { Request, Response } from "express";
-import {
-  createBlogModel,
-  getBlogModel,
-  updateBlogModel,
-} from "../models/blog.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { AppError } from "../utils/AppError.js";
 import {
   addBlog,
   deleteBlog,
@@ -13,35 +9,31 @@ import {
   getBlogById,
   updateBlog,
 } from "../services/blog.service.js";
+import { uploadImageAndGetUrl } from "../services/imageUpload.service.js";
+
+// Note: userId should ideally come from an auth middleware (req.user.id)
+// rather than the request body, so a caller can't act as another user.
 
 const CreateBlogSchema = z.object({
-  userId: z.number().int(),
-  blogDetail: z.string(),
-  blogImage: z.string(),
+  userId: z.coerce.number().int(),
+  blogDetail: z.string().min(1),
   uploadDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date format",
   }),
 });
 
-const getBlogByIdSchema = z.object({
-  userId: z.number().int(),
-  blogId: z.number().int(),
+const IdParamsSchema = z.object({
+  userId: z.coerce.number().int(),
+  blogId: z.coerce.number().int(),
 });
 
-const UpdateBlogSchema = z.object({
-  userId: z.number().int(),
-  blogId: z.number().int(),
-  blogDetail: z.string(),
-  blogImage: z.string(),
-  uploadDate: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid date format",
-  }),
+const UpdateBlogSchema = CreateBlogSchema.extend({
+  blogId: z.coerce.number().int(),
 });
 
 export const addBlogController = asyncHandler(
   async (req: Request, res: Response) => {
     const parsed = CreateBlogSchema.safeParse(req.body);
-
     if (!parsed.success) {
       return res.status(400).json({
         message: "Validation failed.",
@@ -49,8 +41,14 @@ export const addBlogController = asyncHandler(
       });
     }
 
-    const blog = createBlogModel(parsed.data);
-    const result = await addBlog(blog);
+    if (!req.file) {
+      throw new AppError("Blog image is required.", 400);
+    }
+
+    // Convert the uploaded file into a permanent URL before touching the DB
+    const blogImage = await uploadImageAndGetUrl(req.file.path);
+
+    const result = await addBlog({ ...parsed.data, blogImage });
 
     return res.status(201).json({
       message: "Blog added successfully.",
@@ -61,8 +59,8 @@ export const addBlogController = asyncHandler(
 
 export const getBlogByIdController = asyncHandler(
   async (req: Request, res: Response) => {
-    const parsed = getBlogByIdSchema.safeParse(req.body);
-
+    // GET requests should read from params/query, not body
+    const parsed = IdParamsSchema.safeParse(req.query);
     if (!parsed.success) {
       return res.status(400).json({
         message: "Validation failed.",
@@ -70,8 +68,7 @@ export const getBlogByIdController = asyncHandler(
       });
     }
 
-    const blog = getBlogModel(parsed.data);
-    const result = await getBlogById(blog);
+    const result = await getBlogById(parsed.data);
 
     return res.status(200).json({
       message: "Blog fetched successfully.",
@@ -81,7 +78,7 @@ export const getBlogByIdController = asyncHandler(
 );
 
 export const getAllBlogsController = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (_req: Request, res: Response) => {
     const result = await getAllBlogs();
 
     return res.status(200).json({
@@ -91,10 +88,9 @@ export const getAllBlogsController = asyncHandler(
   },
 );
 
-export const updateBlogContoller = asyncHandler(
+export const updateBlogController = asyncHandler(
   async (req: Request, res: Response) => {
     const parsed = UpdateBlogSchema.safeParse(req.body);
-
     if (!parsed.success) {
       return res.status(400).json({
         message: "Validation failed.",
@@ -102,8 +98,17 @@ export const updateBlogContoller = asyncHandler(
       });
     }
 
-    const blog = updateBlogModel(parsed.data);
-    const result = await updateBlog(blog);
+    // Image is optional on update — only re-upload if a new file was sent,
+    // otherwise keep whatever URL was already saved (client should send it back).
+    let blogImage = req.body.existingBlogImage as string | undefined;
+    if (req.file) {
+      blogImage = await uploadImageAndGetUrl(req.file.path);
+    }
+    if (!blogImage) {
+      throw new AppError("Blog image is required.", 400);
+    }
+
+    const result = await updateBlog({ ...parsed.data, blogImage });
 
     return res.status(200).json({
       message: "Blog updated successfully.",
@@ -114,8 +119,7 @@ export const updateBlogContoller = asyncHandler(
 
 export const deleteBlogController = asyncHandler(
   async (req: Request, res: Response) => {
-    const parsed = getBlogByIdSchema.safeParse(req.body);
-
+    const parsed = IdParamsSchema.safeParse(req.query);
     if (!parsed.success) {
       return res.status(400).json({
         message: "Validation failed.",
@@ -123,8 +127,7 @@ export const deleteBlogController = asyncHandler(
       });
     }
 
-    const blog = getBlogModel(parsed.data);
-    const result = await deleteBlog(blog);
+    await deleteBlog(parsed.data);
 
     return res.status(200).json({
       message: "Blog deleted successfully.",
