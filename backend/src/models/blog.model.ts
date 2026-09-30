@@ -1,45 +1,20 @@
-export type Blogs = {
+// The old createBlogModel/updateBlogModel/getBlogModel functions just returned
+// an object identical to their input — they added no value and were a layer of
+// indirection to trace through. Zod's `.parse()` already returns a correctly
+// typed object, so the controller can pass that straight to the service.
+
+export type Blog = {
   userId: number;
   blogDetail: string;
-  blogImage: string;
+  blogImage: string; // URL, not raw image data
   uploadDate: string;
 };
 
-export type UpdateBlogs = {
-  userId: number;
+export type UpdateBlog = Blog & {
   blogId: number;
-  blogDetail: string;
-  blogImage: string;
-  uploadDate: string;
 };
 
 export type GetBlog = {
   userId: number;
   blogId: number;
 };
-
-export function createBlogModel(blogData: Blogs) {
-  return {
-    userId: blogData.userId,
-    blogDetail: blogData.blogDetail,
-    blogImage: blogData.blogImage,
-    uploadDate: blogData.uploadDate,
-  };
-}
-
-export function updateBlogModel(blogData: UpdateBlogs) {
-  return {
-    userId: blogData.userId,
-    blogId: blogData.blogId,
-    blogDetail: blogData.blogDetail,
-    blogImage: blogData.blogImage,
-    uploadDate: blogData.uploadDate,
-  };
-}
-
-export function getBlogModel(blogData: GetBlog) {
-  return {
-    userId: blogData.userId,
-    blogId: blogData.blogId,
-  };
-}

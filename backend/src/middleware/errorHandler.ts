@@ -19,7 +19,7 @@ export function errorHandler(
   const status = isKnownError ? err.status : 500;
   const message = isKnownError ? err.message : "Internal server error";
 
-  console.error(err); // always log full detail server-side
+  console.error(err);
 
   res.status(status).json({
     message,
