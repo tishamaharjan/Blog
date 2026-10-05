@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import LoginButton from "../button/LoginButton";
 import { authApi } from "../../api";
+import Button from "../button/Button";
 
 type FormData = {
   username: string;
@@ -204,7 +204,9 @@ const Register = () => {
           </>
 
           {apiError && <span className="text-red-500 text-xs">{apiError}</span>}
-          <LoginButton text={isSubmitting ? "Registering..." : "Register"} />
+          <Button variant="primary" type="submit" loading={isSubmitting}>
+            {isSubmitting ? "Registering..." : "Register"}
+          </Button>
         </form>
         <a href="/" className="mt-3 underline text-[#A7C1A8]">
           To login Click here.

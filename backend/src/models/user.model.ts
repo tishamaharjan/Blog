@@ -8,7 +8,6 @@ export type User = {
 };
 
 export type UpdateUser = {
-  userId: number;
   username: string;
   email: string;
   phoneNumber: string;
@@ -21,10 +20,13 @@ export type UserId = {
 };
 
 export type ChangePassword = {
-  userId: number;
   currentPassword: string;
   newPassword: string;
 };
+
+export type UpdateUserInput = UpdateUser & UserId;
+
+export type ChangePasswordInput = ChangePassword & UserId;
 
 export function createUserModel(userData: User) {
   return {
@@ -43,9 +45,12 @@ export function getUserByIdModel(userData: UserId) {
   };
 }
 
-export function updateUserModel(userData: UpdateUser) {
+export function updateUserModel(
+  userData: UpdateUser,
+  userId: number,
+): UpdateUserInput {
   return {
-    userId: userData.userId,
+    userId,
     username: userData.username,
     email: userData.email,
     phoneNumber: userData.phoneNumber,
@@ -54,15 +59,18 @@ export function updateUserModel(userData: UpdateUser) {
   };
 }
 
-export function deleteUserModel(userData: UserId) {
+export function deleteUserModel(userId: number) {
   return {
-    userId: userData.userId,
+    userId,
   };
 }
 
-export function changePasswordModel(userData: ChangePassword) {
+export function changePasswordModel(
+  userData: ChangePassword,
+  userId: number,
+): ChangePasswordInput {
   return {
-    userId: userData.userId,
+    userId,
     currentPassword: userData.currentPassword,
     newPassword: userData.newPassword,
   };
