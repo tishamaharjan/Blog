@@ -24,11 +24,15 @@ const Button = ({
 }: ButtonProps) => {
   const variantStyles = {
     primary:
-      "bg-[#819A91] text-white hover:bg-[#718A80] focus:ring-[#819A91]/30",
-    add: "bg-[#738A81] text-white hover:bg-[#627A71] focus:ring-[#738A81]/30",
+      "bg-[var(--color-button)] text-white hover:bg-[var(--color-button-hover)] focus:ring-[var(--color-button)]/30",
+
+    add: "bg-[var(--color-add-button)] text-white hover:bg-[var(--color-add-button-hover)] focus:ring-[var(--color-add-button)]/30",
+
     secondary:
-      "bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-300/50",
-    danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500/30",
+      "bg-[var(--color-secondary-button)] text-[var(--color-text-primary)] hover:bg-[var(--color-secondary-button-hover)] focus:ring-[var(--color-secondary-button)]/50",
+
+    danger:
+      "bg-[var(--color-danger-button)] text-white hover:bg-[var(--color-danger-button-hover)] focus:ring-[var(--color-danger-button)]/30",
   };
 
   const sizeStyles = {

@@ -1,91 +1,24 @@
-import { useEffect, useState } from "react";
-import BlogCard from "../components/BlogCard";
+import { useNavigate } from "react-router-dom";
+import Button from "../components/ui/Button";
 
-type Blog = {
-  BlogID: number;
-  UserID: number;
-  BlogDetail: string;
-  BlogImage: string;
-};
+const Blog = () => {
+  const navigate = useNavigate();
 
-type BlogResponse = {
-  success: boolean;
-  data: Blog[];
-};
-
-const Home = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const getAllBlogs = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/blogs/get-all-blogs",
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch blogs");
-        }
-
-        const result: BlogResponse = await response.json();
-
-        setBlogs(result.data);
-      } catch (error) {
-        console.error(error);
-        setError("Failed to load blogs");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getAllBlogs();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-gray-500">
-        Loading blogs...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-red-500">
-        {error}
-      </div>
-    );
-  }
+  const onAddBlog = () => {
+    navigate("/addblog");
+  };
 
   return (
-    <div className="min-h-screen bg-[#F5F7F6] px-4 py-6">
-      <div className="flex flex-col gap-6">
-        {blogs.map((blog) => (
-          <BlogCard key={blog.BlogID}>
-            <div className="flex flex-col gap-4">
-              <p className="text-xs font-medium text-[#738A81]">
-                Blog #{blog.BlogID}
-              </p>
-
-              <p className="text-lg font-semibold text-[#36413D]">
-                {blog.BlogDetail}
-              </p>
-
-              {blog.BlogImage && (
-                <img
-                  src={blog.BlogImage}
-                  alt={blog.BlogDetail}
-                  className="w-full max-h-[350px] object-cover rounded-xl"
-                />
-              )}
-            </div>
-          </BlogCard>
-        ))}
-      </div>
+    <div className="h-28 w-1/3 ml-auto bg-[var(--color-bg)] px-4 py-6 flex justify-end">
+      <Button
+        variant="add"
+        className="cursor-pointer w-fit"
+        onClick={onAddBlog}
+      >
+        + Add Blog
+      </Button>
     </div>
   );
 };
 
-export default Home;
+export default Blog;

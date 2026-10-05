@@ -44,47 +44,49 @@ const AddBlog = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7F6] flex flex-col items-center px-4 py-10">
+    <div className="min-h-screen bg-[var(--color-bg)] flex flex-col items-center px-4 py-10">
       <div className="w-full max-w-xl">
-        <h1 className="text-3xl font-bold text-[#36413D] text-center mb-2">
+        <h1 className="text-3xl font-bold text-[var(--color-text-primary)] text-center mb-2">
           Add Blog
         </h1>
 
-        <p className="text-sm text-gray-500 text-center mb-6">
+        <p className="text-sm text-[var(--color-text-secondary)] text-center mb-6">
           Create and share a new blog post.
         </p>
 
         <form
           onSubmit={onSubmit}
-          className="flex flex-col gap-2 mx-auto border border-gray-200 p-6 sm:p-8 rounded-2xl bg-white shadow-lg"
+          className="flex flex-col gap-2 mx-auto border border-[var(--color-border)] p-6 sm:p-8 rounded-2xl bg-[var(--color-surface)] shadow-lg"
         >
-          <label className="text-sm font-medium text-gray-700">Title:</label>
+          <label className="text-sm font-medium text-[var(--color-text-primary)]">
+            Title:
+          </label>
 
           <input
-            className="h-11 px-3 rounded-lg border border-gray-300 w-full bg-white outline-none transition focus:border-[#738A81] focus:ring-2 focus:ring-[#738A81]/20"
+            className="h-11 px-3 rounded-lg border border-[var(--color-input-border)] w-full bg-[var(--color-input-bg)] text-[var(--color-text-primary)] outline-none transition focus:border-[var(--color-secondary)] focus:ring-2 focus:ring-[var(--color-secondary)]/20"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
           />
 
-          <label className="text-sm font-medium text-gray-700 mt-2">
+          <label className="text-sm font-medium text-[var(--color-text-primary)] mt-2">
             Description:
           </label>
 
           <textarea
-            className="px-3 py-2 rounded-lg border border-gray-300 w-full h-[140px] bg-white outline-none resize-none transition focus:border-[#738A81] focus:ring-2 focus:ring-[#738A81]/20"
+            className="px-3 py-2 rounded-lg border border-[var(--color-input-border)] w-full h-[140px] bg-[var(--color-input-bg)] text-[var(--color-text-primary)] outline-none resize-none transition focus:border-[var(--color-secondary)] focus:ring-2 focus:ring-[var(--color-secondary)]/20"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
 
-          <label className="text-sm font-medium text-gray-700 mt-2">
+          <label className="text-sm font-medium text-[var(--color-text-primary)] mt-2">
             Image:
           </label>
 
           <input
-            className="w-full px-3 py-2 rounded-lg border border-gray-300 bg-white text-sm text-gray-600 file:mr-3 file:border-0 file:rounded-md file:bg-[#738A81] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-[#627A71] transition"
+            className="w-full px-3 py-2 rounded-lg border border-[var(--color-input-border)] bg-[var(--color-input-bg)] text-sm text-[var(--color-text-secondary)] file:mr-3 file:border-0 file:rounded-md file:bg-[var(--color-secondary)] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-[var(--color-secondary-hover)] transition"
             type="file"
             name="Image"
             accept="image/*"

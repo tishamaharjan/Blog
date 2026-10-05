@@ -30,7 +30,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-gray-500">
+      <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-text-secondary)]">
         Loading profile...
       </div>
     );
@@ -38,7 +38,7 @@ const Profile = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-red-500">
+      <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-danger)]">
         {error}
       </div>
     );
@@ -46,14 +46,14 @@ const Profile = () => {
 
   if (!userDetails) {
     return (
-      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-gray-500">
+      <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-text-secondary)]">
         User not found
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F7F6] flex items-start justify-center px-4 py-10">
+    <div className="min-h-screen bg-[var(--color-bg)] flex items-start justify-center px-4 py-10">
       <ProfileCard username={userDetails.username} email={userDetails.email} />
     </div>
   );

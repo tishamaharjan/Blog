@@ -9,7 +9,7 @@ const Input = ({ label, children, className = "", ...props }: InputProps) => {
       {label && (
         <label
           htmlFor={props.id}
-          className="text-sm font-medium text-gray-700 text-left"
+          className="text-sm font-medium text-[var(--color-text-primary)] text-left"
         >
           {label}
         </label>
@@ -23,13 +23,13 @@ const Input = ({ label, children, className = "", ...props }: InputProps) => {
           items-center
           rounded-lg
           border
-          border-gray-300
-          bg-white
+          border-[var(--color-input-border)]
+          bg-[var(--color-input-bg)]
           overflow-hidden
           transition
-          focus-within:border-[#738A81]
+          focus-within:border-[var(--color-secondary)]
           focus-within:ring-2
-          focus-within:ring-[#738A81]/20
+          focus-within:ring-[var(--color-secondary)]/20
         "
       >
         <input
@@ -40,11 +40,17 @@ const Input = ({ label, children, className = "", ...props }: InputProps) => {
             min-w-0
             px-3
             bg-transparent
+            text-[var(--color-text-primary)]
+            placeholder:text-[var(--color-text-muted)]
             outline-none
             border-none
 
-            autofill:bg-transparent
-            autofill:shadow-[inset_0_0_0px_1000px_white]
+            autofill:bg-[var(--color-input-bg)]
+            autofill:text-[var(--color-text-primary)]
+
+            [-webkit-text-fill-color:var(--color-text-primary)]
+            [-webkit-box-shadow:0_0_0px_1000px_var(--color-input-bg)_inset]
+
             ${className}
           `}
         />

@@ -4,6 +4,7 @@ import BlogCard from "../components/BlogCard";
 type Blog = {
   BlogID: number;
   UserID: number;
+  BlogTitle: string;
   BlogDetail: string;
   BlogImage: string;
 };
@@ -44,28 +45,50 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading blogs...</div>;
+    return (
+      <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-text-secondary)]">
+        Loading blogs...
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-danger)]">
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div>
-      {blogs.map((blog) => (
-        <BlogCard key={blog.BlogID}>
-          <div>
-            <p>Blog Number: {blog.BlogID}</p>
+    <div className="min-h-screen bg-[var(--color-bg)] px-4 py-6">
+      <div className="flex flex-col gap-6">
+        {blogs.map((blog) => (
+          <BlogCard key={blog.BlogID}>
+            <div className="flex flex-col gap-4">
+              <p className="text-xs font-medium text-[var(--color-secondary)]">
+                Blog #{blog.BlogID}
+              </p>
 
-            <p>Blog is about: {blog.BlogDetail}</p>
+              <p className="text-lg font-semibold text-[var(--color-text-primary)]">
+                {blog.BlogTitle}
+              </p>
 
-            {blog.BlogImage && (
-              <img src={blog.BlogImage} alt={blog.BlogDetail} />
-            )}
-          </div>
-        </BlogCard>
-      ))}
+              <p className="text-base text-[var(--color-text-secondary)]">
+                {blog.BlogDetail}
+              </p>
+
+              {blog.BlogImage && (
+                <img
+                  src={blog.BlogImage}
+                  alt={blog.BlogDetail}
+                  className="w-full max-h-[350px] object-cover rounded-xl"
+                />
+              )}
+            </div>
+          </BlogCard>
+        ))}
+      </div>
     </div>
   );
 };

@@ -6,13 +6,19 @@ import Profile from "./pages/profile";
 import Login from "./components/Login";
 import AddBlog from "./pages/addblog";
 import Register from "./components/Register";
+import ThemeToggle from "./components/ui/ThemeToggle";
 
 function App() {
   const location = useLocation();
+
   return (
     <>
-      {location.pathname !== "/" && location.pathname !== "/register" && (
+      {location.pathname !== "/" && location.pathname !== "/register" ? (
         <Navbar />
+      ) : (
+        <div className="fixed top-4 right-4 z-[100]">
+          <ThemeToggle />
+        </div>
       )}
 
       <Routes>

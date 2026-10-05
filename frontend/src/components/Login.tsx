@@ -11,7 +11,6 @@ type FormData = {
   email: string;
   password: string;
 };
-
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,6 +27,7 @@ const Login = () => {
   const onSubmit = async (data: FormData) => {
     setApiError(null);
     setIsSubmitting(true);
+
     try {
       await authApi.login({
         email: data.email,
@@ -45,19 +45,19 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7F6] flex flex-col items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-[var(--color-bg)] flex flex-col items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
-        <h1 className="text-3xl font-bold text-[#36413D] text-center mb-2">
+        <h1 className="text-3xl font-bold text-[var(--color-text-primary)] text-center mb-2">
           Login
         </h1>
 
-        <p className="text-sm text-gray-500 text-center mb-6">
+        <p className="text-sm text-[var(--color-text-secondary)] text-center mb-6">
           Welcome back! Please login to your account.
         </p>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-white flex flex-col gap-4 border border-gray-200 shadow-lg w-full p-6 sm:p-8 rounded-2xl"
+          className="bg-[var(--color-surface)] flex flex-col gap-4 border border-[var(--color-border)] shadow-lg w-full p-6 sm:p-8 rounded-2xl"
         >
           <div>
             <Input
@@ -70,7 +70,7 @@ const Login = () => {
             />
 
             {errors.email && (
-              <span className="text-red-500 text-xs text-left">
+              <span className="text-[var(--color-danger)] text-xs text-left">
                 Email is required
               </span>
             )}
@@ -87,7 +87,7 @@ const Login = () => {
             >
               <button
                 type="button"
-                className="h-full w-11 flex items-center justify-center text-gray-400 hover:text-[#738A81] transition"
+                className="h-full w-11 flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
@@ -95,28 +95,30 @@ const Login = () => {
             </Input>
 
             {errors.password && (
-              <span className="text-red-500 text-xs text-left">
+              <span className="text-[var(--color-danger)] text-xs text-left">
                 Password is required
               </span>
             )}
           </div>
 
           {apiError && (
-            <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-              <span className="text-red-500 text-xs">{apiError}</span>
+            <div className="bg-[var(--color-danger-bg)] border border-[var(--color-danger-border)] rounded-lg px-3 py-2">
+              <span className="text-[var(--color-danger)] text-xs">
+                {apiError}
+              </span>
             </div>
           )}
 
-          <Button variant="primary" type="submit">
-            {isSubmitting ? "Logging in..." : "Login"}
+          <Button variant="primary" type="submit" loading={isSubmitting}>
+            Login
           </Button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-5">
+        <p className="text-center text-sm text-[var(--color-text-secondary)] mt-5">
           Don't have an account?{" "}
           <a
             href="/register"
-            className="text-[#738A81] font-medium underline underline-offset-2 hover:text-[#50665D] transition"
+            className="text-[var(--color-secondary)] font-medium underline underline-offset-2 hover:text-[var(--color-secondary-hover)] transition"
           >
             Register here
           </a>
