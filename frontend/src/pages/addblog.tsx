@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AddButton from "../components/button/AddButton";
+import Button from "../components/button/Button";
 
 const AddBlog = () => {
   const [title, setTitle] = useState("");
@@ -81,7 +81,9 @@ const AddBlog = () => {
           required
         />
 
-        <AddButton text="Add Blog" className="w-full" />
+        <Button variant="add" className="cursor-pointer ml-auto w-fit">
+          + Add Blog
+        </Button>
       </form>
     </div>
   );

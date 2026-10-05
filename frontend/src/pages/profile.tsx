@@ -1,40 +1,24 @@
 import { useEffect, useState } from "react";
 import ProfileCard from "../components/ui/ProfileCard";
-
-type User = {
-  username: string;
-  email: string;
-  password: string;
-};
+import { userApi, ApiError } from "../api";
+import type { CurrentUser } from "../types/auth";
 
 const Profile = () => {
-  const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [userDetails, setUserDetails] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const userId = localStorage.getItem("userId");
-
-        if (!userId) {
-          setError("User ID not found");
+        // The httpOnly cookie is the only auth state; the server resolves identity.
+        const { data } = await userApi.getMe();
+        setUserDetails(data);
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 401) {
+          setError("Please log in to view your profile");
           return;
         }
-
-        const response = await fetch(
-          `http://localhost:3000/api/users/${userId}`,
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch user");
-        }
-
-        const result = await response.json();
-
-        setUserDetails(result.data);
-      } catch (error) {
-        console.error(error);
         setError("Failed to load user details");
       } finally {
         setLoading(false);

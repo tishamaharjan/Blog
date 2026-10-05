@@ -15,6 +15,8 @@ import {
   updateUser,
 } from "../services/user.service.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import type { AuthenticatedRequest } from "../middleware/authentication.js";
+import { AppError } from "../utils/AppError.js";
 
 const CreateUserSchema = z.object({
   username: z.string().min(3).max(255),
@@ -28,7 +30,6 @@ const CreateUserSchema = z.object({
 });
 
 const UpdateUserSchema = z.object({
-  userId: z.number().int(),
   username: z.string().min(3).max(255),
   email: z.string().email(),
   phoneNumber: z.string().min(7),
@@ -43,10 +44,19 @@ const IdUserSchema = z.object({
 });
 
 const ChangePasswordSchema = z.object({
-  userId: z.number().int(),
   currentPassword: z.string().min(8),
   newPassword: z.string().min(8),
 });
+
+function authenticatedUserId(req: AuthenticatedRequest): number {
+  const userId = Number(req.user?.userId);
+
+  if (!Number.isInteger(userId)) {
+    throw new AppError("Not authenticated.", 401);
+  }
+
+  return userId;
+}
 
 export const registerUserController = asyncHandler(
   async (req: Request, res: Response) => {
@@ -92,8 +102,22 @@ export const getUserByIdController = asyncHandler(
   },
 );
 
+export const getCurrentUserController = asyncHandler(
+  async (req: AuthenticatedRequest, res: Response) => {
+    const userId = authenticatedUserId(req);
+    const result = await getUserById({ userId });
+
+    return res.status(200).json({
+      message: "Current user fetched successfully.",
+      data: result,
+    });
+  },
+);
+
 export const updateUserController = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
+    const userId = authenticatedUserId(req);
+
     const parsed = UpdateUserSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -103,7 +127,7 @@ export const updateUserController = asyncHandler(
       });
     }
 
-    const user = updateUserModel(parsed.data);
+    const user = updateUserModel(parsed.data, userId);
     const result = await updateUser(user);
 
     return res.status(200).json({
@@ -114,17 +138,9 @@ export const updateUserController = asyncHandler(
 );
 
 export const deleteUserController = asyncHandler(
-  async (req: Request, res: Response) => {
-    const parsed = IdUserSchema.safeParse(req.body);
-
-    if (!parsed.success) {
-      return res.status(400).json({
-        message: "Validation failed.",
-        errors: parsed.error.flatten(),
-      });
-    }
-
-    const user = deleteUserModel(parsed.data);
+  async (req: AuthenticatedRequest, res: Response) => {
+    const userId = authenticatedUserId(req);
+    const user = deleteUserModel(userId);
     await deleteUser(user);
 
     return res.status(200).json({
@@ -134,7 +150,9 @@ export const deleteUserController = asyncHandler(
 );
 
 export const changePasswordController = asyncHandler(
-  async (req: Request, res: Response) => {
+  async (req: AuthenticatedRequest, res: Response) => {
+    const userId = authenticatedUserId(req);
+
     const parsed = ChangePasswordSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -144,7 +162,7 @@ export const changePasswordController = asyncHandler(
       });
     }
 
-    const user = changePasswordModel(parsed.data);
+    const user = changePasswordModel(parsed.data, userId);
     const result = await changePassword(user);
 
     return res.status(200).json({

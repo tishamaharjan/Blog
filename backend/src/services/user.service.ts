@@ -3,14 +3,34 @@ import bcrypt from "bcrypt";
 import { getDB } from "../config/db.js";
 import type {
   UserId,
-  UpdateUser,
+  UpdateUserInput,
   User,
-  ChangePassword,
+  ChangePasswordInput,
 } from "../models/user.model.js";
 import { AppError } from "../utils/AppError.js";
 
 const SALT_ROUNDS = 10;
 const SQL_UNIQUE_VIOLATION_CODES = new Set([2627, 2601]);
+
+export interface PublicUser {
+  userId: number;
+  username: string;
+  email: string;
+  phoneNumber: string;
+  dob: string;
+  profileImage: string | null;
+}
+
+function toPublicUser(row: Record<string, unknown>): PublicUser {
+  return {
+    userId: Number(row.UserID),
+    username: String(row.Username),
+    email: String(row.Email),
+    phoneNumber: String(row.PhoneNumber),
+    dob: String(row.DOB),
+    profileImage: row.ProfileImage == null ? null : String(row.ProfileImage),
+  };
+}
 
 export async function registerUser(user: User) {
   try {
@@ -32,7 +52,7 @@ export async function registerUser(user: User) {
       email: user.email,
     };
   } catch (e: any) {
-    if (e.number === 2627 || e.number === 2601) {
+    if (SQL_UNIQUE_VIOLATION_CODES.has(e.number)) {
       throw new AppError("Email already registered.", 409);
     }
 
@@ -52,10 +72,10 @@ export async function getUserById(user: UserId) {
     throw new AppError("User not found.", 404);
   }
 
-  return result.recordset[0];
+  return toPublicUser(result.recordset[0]);
 }
 
-export async function updateUser(user: UpdateUser) {
+export async function updateUser(user: UpdateUserInput) {
   try {
     const pool = getDB();
 
@@ -73,7 +93,7 @@ export async function updateUser(user: UpdateUser) {
       throw new AppError("User not found.", 404);
     }
 
-    return result.recordset[0];
+    return toPublicUser(result.recordset[0]);
   } catch (e: any) {
     if (e.message?.includes("Email already exists.")) {
       throw new AppError("Email already registered.", 409);
@@ -83,7 +103,7 @@ export async function updateUser(user: UpdateUser) {
       throw new AppError("Phone number already registered.", 409);
     }
 
-    if (e.number === 2627 || e.number === 2601) {
+    if (SQL_UNIQUE_VIOLATION_CODES.has(e.number)) {
       throw new AppError("Duplicate value.", 409);
     }
 
@@ -108,7 +128,7 @@ export async function deleteUser(user: UserId) {
   };
 }
 
-export async function changePassword(user: ChangePassword) {
+export async function changePassword(user: ChangePasswordInput) {
   const pool = getDB();
 
   const userResult = await pool

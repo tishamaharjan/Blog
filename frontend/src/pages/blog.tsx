@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import AddButton from "../components/button/AddButton";
+import Button from "../components/button/Button";
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -8,11 +8,13 @@ const Blog = () => {
   };
   return (
     <div className="flex justify-left">
-      <AddButton
-        text="Add Blog"
+      <Button
+        variant="add"
         className="cursor-pointer ml-auto w-fit"
         onClick={onAddBlog}
-      />
+      >
+        + Add Blog
+      </Button>
     </div>
   );
 };

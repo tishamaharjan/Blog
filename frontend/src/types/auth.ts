@@ -12,11 +12,35 @@ export interface RegisterUser {
   password: string;
 }
 
-export type AuthResponse = {
-  token: string;
-  user: {
-    id: string;
-    username: string;
-    email: string;
-  };
-};
+export interface UpdateProfile {
+  username: string;
+  email: string;
+  phoneNumber: string;
+  dob: string;
+  profileImage?: string;
+}
+
+export interface ChangePassword {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface CurrentUser {
+  userId: number;
+  username: string;
+  email: string;
+  phoneNumber: string;
+  dob: string;
+  profileImage: string | null;
+}
+
+export interface ApiResponse<T> {
+  message: string;
+  data: T;
+}
+
+export type AuthResponse = ApiResponse<{
+  userId: number;
+  username: string;
+  email: string;
+}>;

@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import LoginButton from "../button/LoginButton";
 import { authApi } from "../../api";
+import Button from "../button/Button";
 
 type FormData = {
   email: string;
@@ -28,19 +28,16 @@ const Login = () => {
     setApiError(null);
     setIsSubmitting(true);
     try {
-      const response = await authApi.login({
+      await authApi.login({
         email: data.email,
         password: data.password,
       });
-      console.log("response login", response);
 
       navigate("/home");
     } catch (error) {
       setApiError(
         error instanceof Error ? error.message : "Invalid email or password",
       );
-      console.log(error);
-      alert("Invalid email or password");
     } finally {
       setIsSubmitting(false);
     }
@@ -93,7 +90,9 @@ const Login = () => {
           </>
 
           {apiError && <span className="text-red-500 text-xs">{apiError}</span>}
-          <LoginButton text={isSubmitting ? "Logging in..." : "Login"} />
+          <Button variant="primary" type="submit">
+            {isSubmitting ? "Logging in..." : "Login"}
+          </Button>
         </form>
         <a href="/register" className="mt-3 underline text-[#A7C1A8]">
           Register user? Click here.

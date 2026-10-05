@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from "express";
 import { verifyToken, type TokenPayload } from "../utils/jwt.js";
 import { AppError } from "../utils/AppError.js";
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
   user?: TokenPayload;
 }
 
