@@ -3,9 +3,9 @@ import Blog from "./pages/blog";
 import Home from "./pages/home";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Profile from "./pages/profile";
-import Login from "./components/ui/Login";
+import Login from "./components/Login";
 import AddBlog from "./pages/addblog";
-import Register from "./components/ui/Register";
+import Register from "./components/Register";
 
 function App() {
   const location = useLocation();

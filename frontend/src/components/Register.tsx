@@ -5,8 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { authApi } from "../../api";
-import Button from "../button/Button";
+import { authApi } from "../api";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
 
 type FormData = {
   username: string;
@@ -17,7 +18,9 @@ type FormData = {
   dob: string;
   profileImage: string;
 };
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const schema = z
   .object({
     username: z.string().min(1, { message: "Username is required" }),
@@ -54,9 +57,11 @@ const Register = () => {
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
   const navigate = useNavigate();
+
   const onSubmit = async (data: FormData) => {
     setApiError(null);
     setIsSubmitting(true);
+
     try {
       const response = await authApi.register({
         username: data.username,
@@ -66,6 +71,7 @@ const Register = () => {
         profileImage: data.profileImage,
         password: data.password,
       });
+
       console.log("response", response);
 
       navigate("/");
@@ -76,141 +82,160 @@ const Register = () => {
       setIsSubmitting(false);
     }
   };
-  // width must be adjusted
+
   return (
-    <div className="flex flex-col justify-center text-center">
-      Register
-      <div className="flex flex-col mt-5">
+    <div className="min-h-screen bg-[#F5F7F6] flex flex-col items-center justify-center px-4 py-10">
+      <div className="w-full max-w-xl">
+        <h1 className="text-3xl font-bold text-[#36413D] text-center mb-2">
+          Create an Account
+        </h1>
+
+        <p className="text-sm text-gray-500 text-center mb-6">
+          Fill in your details to create your account.
+        </p>
+
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="bg-[#EAEFEF] flex flex-col gap-1 border-2 md:w-1/3  mx-auto p-5 rounded-[10px]"
+          className="bg-white flex flex-col gap-4 border border-gray-200 shadow-lg w-full p-6 sm:p-8 rounded-2xl"
         >
-          <>
-            <label>Username:</label>
-            <input
+          <div>
+            <Input
+              label="Username"
               type="text"
-              placeholder="Username"
+              placeholder="Enter your username"
               {...register("username")}
-              className="border-1 px-1 rounded-[5px] w-[95%] bg-white"
             />
+
             {errors.username && (
-              <span className="text-red-500 text-xs">
+              <span className="text-red-500 text-xs text-left">
                 {errors.username.message}
               </span>
             )}
-          </>
+          </div>
 
-          <>
-            <label>Email:</label>
-            <input
-              type="text"
-              placeholder="Email"
+          <div>
+            <Input
+              label="Email"
+              type="email"
+              placeholder="Enter your email"
               {...register("email")}
-              className="border-1 px-1 rounded-[5px] w-[95%] bg-white"
             />
+
             {errors.email && (
-              <span className="text-red-500 text-xs">
+              <span className="text-red-500 text-xs text-left">
                 {errors.email.message}
               </span>
             )}
-          </>
+          </div>
 
-          <>
-            <label>Phone Number:</label>
-            <input
-              {...register("phoneNumber")}
+          <div>
+            <Input
+              label="Phone Number"
               type="tel"
-              placeholder="Phone Number"
-              className="border-1 px-1 rounded-[5px] w-[95%] bg-white"
+              placeholder="Enter your phone number"
+              {...register("phoneNumber")}
             />
+
             {errors.phoneNumber && (
-              <span className="text-red-500 text-xs">
+              <span className="text-red-500 text-xs text-left">
                 {errors.phoneNumber.message}
               </span>
             )}
-          </>
+          </div>
 
-          <>
-            <label>Date of Birth:</label>
-            <input
-              {...register("dob")}
-              type="date"
-              className="border-1 px-1 rounded-[5px] w-[95%] bg-white"
-            />
+          <div>
+            <Input label="Date of Birth" type="date" {...register("dob")} />
+
             {errors.dob && (
-              <span className="text-red-500 text-xs">{errors.dob.message}</span>
+              <span className="text-red-500 text-xs text-left">
+                {errors.dob.message}
+              </span>
             )}
-          </>
+          </div>
 
-          <>
-            <label>Profile Image:</label>
-            <input
-              {...register("profileImage")}
+          <div>
+            <Input
+              label="Profile Image"
               type="text"
-              placeholder="Image URL"
-              className="border-1 px-1 rounded-[5px] w-[95%] bg-white"
+              placeholder="Enter image URL"
+              {...register("profileImage")}
             />
+
             {errors.profileImage && (
-              <span className="text-red-500 text-xs">
+              <span className="text-red-500 text-xs text-left">
                 {errors.profileImage.message}
               </span>
             )}
-          </>
+          </div>
 
-          <>
-            <label>Password:</label>
-            <div className="border-1 flex items-center rounded-[5px] w-[95%] focus-within:border-2 bg-white">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                className="px-1 rounded-[5px] w-full bg-transparent outline-none"
-                {...register("password")}
-              />
-              <FontAwesomeIcon
-                icon={showPassword ? faEyeSlash : faEye}
-                color="gray"
-                className="cursor-pointer mr-1"
+          <div>
+            <Input
+              label="Password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              {...register("password")}
+            >
+              <button
+                type="button"
+                className="h-full w-11 flex items-center justify-center text-gray-400 hover:text-[#738A81] transition"
                 onClick={() => setShowPassword(!showPassword)}
-              />
-            </div>
+              >
+                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+              </button>
+            </Input>
+
             {errors.password && (
-              <span className="text-red-500 text-xs">
+              <span className="text-red-500 text-xs text-left">
                 {errors.password.message}
               </span>
             )}
-          </>
+          </div>
 
-          <>
-            <label>Confirm Password:</label>
-            <div className="border-1 flex items-center rounded-[5px] w-[95%] focus-within:border-2 bg-white">
-              <input
-                type={showCurrentPassword ? "text" : "password"}
-                placeholder="Current Password"
-                className="px-1 rounded-[5px] w-full bg-transparent outline-none"
-                {...register("confirmPassword")}
-              />
-              <FontAwesomeIcon
-                icon={showCurrentPassword ? faEyeSlash : faEye}
-                color="gray"
-                className="cursor-pointer mr-1"
+          <div>
+            <Input
+              label="Confirm Password"
+              type={showCurrentPassword ? "text" : "password"}
+              placeholder="Confirm your password"
+              {...register("confirmPassword")}
+            >
+              <button
+                type="button"
+                className="h-full w-11 flex items-center justify-center text-gray-400 hover:text-[#738A81] transition"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-              />
-            </div>
+              >
+                <FontAwesomeIcon
+                  icon={showCurrentPassword ? faEyeSlash : faEye}
+                />
+              </button>
+            </Input>
+
             {errors.confirmPassword && (
-              <span className="text-red-500 text-xs">
+              <span className="text-red-500 text-xs text-left">
                 {errors.confirmPassword.message}
               </span>
             )}
-          </>
+          </div>
 
-          {apiError && <span className="text-red-500 text-xs">{apiError}</span>}
+          {apiError && (
+            <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+              <span className="text-red-500 text-xs">{apiError}</span>
+            </div>
+          )}
+
           <Button variant="primary" type="submit" loading={isSubmitting}>
             {isSubmitting ? "Registering..." : "Register"}
           </Button>
         </form>
-        <a href="/" className="mt-3 underline text-[#A7C1A8]">
-          To login Click here.
-        </a>
+
+        <p className="text-center text-sm text-gray-500 mt-5">
+          Already have an account?{" "}
+          <a
+            href="/"
+            className="text-[#738A81] font-medium underline underline-offset-2 hover:text-[#50665D] transition"
+          >
+            Login here
+          </a>
+        </p>
       </div>
     </div>
   );

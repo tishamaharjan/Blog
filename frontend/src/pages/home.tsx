@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import BlogCard from "../components/ui/BlogCard";
+import BlogCard from "../components/BlogCard";
 
 type Blog = {
   BlogID: number;

@@ -5,13 +5,14 @@ type Props = {
 
 const ProfileCard = ({ username, email }: Props) => {
   return (
-    <div className="border-2 p-4 m-2 rounded-2xl bg-[#e0e8cf] mx-auto w-fit">
-      <div className="flex  items-center">
-        <div className=" flex flex-col mr-5">
+    <div className="border border-gray-200 p-6 m-4 rounded-2xl bg-white shadow-md mx-auto w-full max-w-md">
+      <div className="flex items-center justify-between gap-8">
+        <div className="flex flex-col gap-3 text-sm font-medium text-gray-500">
           <span>Username:</span>
           <span>Email:</span>
         </div>
-        <div className="flex flex-col mr-5">
+
+        <div className="flex flex-col gap-3 text-sm text-gray-800 text-right">
           <span>{username}</span>
           <span>{email}</span>
         </div>

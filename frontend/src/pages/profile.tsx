@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ProfileCard from "../components/ui/ProfileCard";
+import ProfileCard from "../components/ProfileCard";
 import { userApi, ApiError } from "../api";
 import type { CurrentUser } from "../types/auth";
 
@@ -29,19 +29,31 @@ const Profile = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading profile...</div>;
+    return (
+      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-gray-500">
+        Loading profile...
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-red-500">
+        {error}
+      </div>
+    );
   }
 
   if (!userDetails) {
-    return <div>User not found</div>;
+    return (
+      <div className="min-h-screen bg-[#F5F7F6] flex items-center justify-center text-gray-500">
+        User not found
+      </div>
+    );
   }
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#F5F7F6] flex items-start justify-center px-4 py-10">
       <ProfileCard username={userDetails.username} email={userDetails.email} />
     </div>
   );

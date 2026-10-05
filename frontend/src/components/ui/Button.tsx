@@ -23,16 +23,18 @@ const Button = ({
   className = "",
 }: ButtonProps) => {
   const variantStyles = {
-    primary: "bg-[#819A91] text-white",
-    add: "bg-[#738a81] text-white",
-    secondary: "bg-gray-200 text-gray-800",
-    danger: "bg-red-500 text-white",
+    primary:
+      "bg-[#819A91] text-white hover:bg-[#718A80] focus:ring-[#819A91]/30",
+    add: "bg-[#738A81] text-white hover:bg-[#627A71] focus:ring-[#738A81]/30",
+    secondary:
+      "bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-300/50",
+    danger: "bg-red-500 text-white hover:bg-red-600 focus:ring-red-500/30",
   };
 
   const sizeStyles = {
-    sm: "px-2 py-1 text-sm",
-    md: "p-1",
-    lg: "px-4 py-2",
+    sm: "px-3 py-1.5 text-sm",
+    md: "px-4 py-2.5 text-sm",
+    lg: "px-5 py-3 text-base",
   };
 
   return (
@@ -43,11 +45,20 @@ const Button = ({
       className={`
         ${variantStyles[variant]}
         ${sizeStyles[size]}
-        rounded-[5px]
-        mt-3
-        cursor-pointer
+        w-full
+        rounded-lg
+        font-medium
+        transition-all
+        duration-200
+        shadow-sm
+        hover:shadow
+        active:scale-[0.98]
+        focus:outline-none
+        focus:ring-2
         disabled:cursor-not-allowed
         disabled:opacity-50
+        disabled:hover:shadow-none
+        disabled:active:scale-100
         ${className}
       `}
     >
