@@ -54,7 +54,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] flex items-start justify-center px-4 py-10">
-      <ProfileCard username={userDetails.username} email={userDetails.email} />
+      <ProfileCard userDetails={userDetails} />
     </div>
   );
 };

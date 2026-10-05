@@ -8,16 +8,16 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { authApi } from "../api";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
+import type { RegisterUser } from "../types/auth";
 
-type FormData = {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  phoneNumber: string;
-  dob: string;
-  profileImage: string;
-};
+// type FormData = {
+//   username: string;
+//   email: string;
+//   phoneNumber: string;
+//   dob: string;
+//   password: string;
+//   confirmPassword: string;
+// };
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -35,9 +35,9 @@ const schema = z
     phoneNumber: z
       .string()
       .min(7, { message: "Phone number is required" })
+      .max(10, { message: "Invalid phone number" })
       .regex(/^\d{10}$/, { message: "Invalid phone number" }),
     dob: z.string().min(1, { message: "Date of birth is required" }),
-    profileImage: z.string().min(1, { message: "Profile image is required" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -49,28 +49,37 @@ const Register = () => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [image, setImage] = useState<File | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<RegisterUser>({ resolver: zodResolver(schema) });
 
   const navigate = useNavigate();
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: RegisterUser) => {
     setApiError(null);
+
+    if (!image) {
+      setApiError("Profile image is required.");
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const response = await authApi.register({
-        username: data.username,
-        email: data.email,
-        phoneNumber: data.phoneNumber,
-        dob: data.dob,
-        profileImage: data.profileImage,
-        password: data.password,
-      });
+      const formData = new FormData();
+
+      formData.append("username", data.username);
+      formData.append("email", data.email);
+      formData.append("phoneNumber", data.phoneNumber);
+      formData.append("dob", data.dob);
+      formData.append("password", data.password);
+      formData.append("profileImage", image);
+
+      const response = await authApi.register(formData);
 
       console.log("response", response);
 
@@ -154,16 +163,22 @@ const Register = () => {
           </div>
 
           <div>
-            <Input
-              label="Profile Image"
-              type="text"
-              placeholder="Enter image URL"
-              {...register("profileImage")}
+            <label className="text-sm font-medium text-[var(--color-text-primary)]">
+              Profile Image
+            </label>
+
+            <input
+              className="w-full px-3 py-2 rounded-lg border border-[var(--color-input-border)] bg-[var(--color-input-bg)] text-sm text-[var(--color-text-secondary)] file:mr-3 file:border-0 file:rounded-md file:bg-[var(--color-secondary)] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-[var(--color-secondary-hover)] transition"
+              type="file"
+              name="profileImage"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files?.[0] ?? null)}
+              required
             />
 
-            {errors.profileImage && (
+            {!image && apiError === "Profile image is required." && (
               <span className="text-[var(--color-danger)] text-xs text-left">
-                {errors.profileImage.message}
+                Profile image is required
               </span>
             )}
           </div>
@@ -216,7 +231,7 @@ const Register = () => {
             )}
           </div>
 
-          {apiError && (
+          {apiError && apiError !== "Profile image is required." && (
             <div className="bg-[var(--color-danger-bg)] border border-[var(--color-danger-border)] rounded-lg px-3 py-2">
               <span className="text-[var(--color-danger)] text-xs">
                 {apiError}

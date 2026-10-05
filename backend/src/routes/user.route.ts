@@ -8,6 +8,7 @@ import {
   updateUserController,
 } from "../controllers/user.controller.js";
 import { requireAuth } from "../middleware/authentication.js";
+import { uploadImage } from "../middleware/upload.middleware.js";
 import rateLimit from "express-rate-limit";
 
 const router: Router = Router();
@@ -20,7 +21,13 @@ const registerLimiter = rateLimit({
   message: { error: "Too many registration attempts. Try again later." },
 });
 
-router.post("/register", registerLimiter, registerUserController);
+// Field name must match the key used in the frontend FormData.
+router.post(
+  "/register",
+  registerLimiter,
+  uploadImage.single("profileImage"),
+  registerUserController,
+);
 router.get("/me", requireAuth, getCurrentUserController);
 router.get("/:id", requireAuth, getUserByIdController);
 router.post("/update-user", requireAuth, updateUserController);

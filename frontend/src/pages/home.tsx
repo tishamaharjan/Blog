@@ -4,6 +4,7 @@ import BlogCard from "../components/BlogCard";
 type Blog = {
   BlogID: number;
   UserID: number;
+  Username: string;
   BlogTitle: string;
   BlogDetail: string;
   BlogImage: string;
@@ -67,7 +68,7 @@ const Home = () => {
           <BlogCard key={blog.BlogID}>
             <div className="flex flex-col gap-4">
               <p className="text-xs font-medium text-[var(--color-secondary)]">
-                Blog #{blog.BlogID}
+                {blog.Username}
               </p>
 
               <p className="text-lg font-semibold text-[var(--color-text-primary)]">

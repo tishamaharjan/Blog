@@ -4,6 +4,8 @@ import Button from "../components/ui/Button";
 const AddBlog = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  // a file input is fundamentally different from normal form inputs, so handled through state
   const [image, setImage] = useState<File | null>(null);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -6,7 +6,7 @@ import {
   getBlogByIdController,
   updateBlogController,
 } from "../controllers/blog.controller.js";
-import { uploadBlogImage } from "../middleware/upload.middleware.js";
+import { uploadImage } from "../middleware/upload.middleware.js";
 
 const router: Router = Router();
 
@@ -24,14 +24,10 @@ const router: Router = Router();
 // router.put("/blogs", uploadBlogImage.single("image"), updateBlogController);
 // router.delete("/blogs", deleteBlogController);
 
-router.post("/add-blog", uploadBlogImage.single("image"), addBlogController);
+router.post("/add-blog", uploadImage.single("image"), addBlogController);
 router.get("/get-blog", getBlogByIdController);
 router.get("/get-all-blogs", getAllBlogsController);
-router.put(
-  "/update-blog",
-  uploadBlogImage.single("image"),
-  updateBlogController,
-);
+router.put("/update-blog", uploadImage.single("image"), updateBlogController);
 router.delete("/delete-blog", deleteBlogController);
 
 export default router;

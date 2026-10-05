@@ -36,7 +36,7 @@ function fileFilter(
   cb(null, true);
 }
 
-export const uploadBlogImage = multer({
+export const uploadImage = multer({
   storage,
   fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB

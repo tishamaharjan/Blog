@@ -17,6 +17,7 @@ import {
 import { asyncHandler } from "../utils/asyncHandler.js";
 import type { AuthenticatedRequest } from "../middleware/authentication.js";
 import { AppError } from "../utils/AppError.js";
+import { uploadImageAndGetUrl } from "../services/imageUpload.service.js";
 
 const CreateUserSchema = z.object({
   username: z.string().min(3).max(255),
@@ -26,7 +27,6 @@ const CreateUserSchema = z.object({
     message: "Invalid date format",
   }),
   password: z.string().min(8),
-  profileImage: z.string(),
 });
 
 const UpdateUserSchema = z.object({
@@ -36,7 +36,6 @@ const UpdateUserSchema = z.object({
   dob: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date format",
   }),
-  profileImage: z.string().optional(),
 });
 
 const IdUserSchema = z.object({
@@ -69,7 +68,19 @@ export const registerUserController = asyncHandler(
       });
     }
 
-    const user = createUserModel(parsed.data);
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Profile image is required.",
+      });
+    }
+
+    const profileImage = await uploadImageAndGetUrl(req.file.path);
+
+    const user = createUserModel({
+      ...parsed.data,
+      profileImage,
+    });
+
     const result = await registerUser(user);
 
     return res.status(201).json({
@@ -127,7 +138,20 @@ export const updateUserController = asyncHandler(
       });
     }
 
-    const user = updateUserModel(parsed.data, userId);
+    let profileImage: string | undefined;
+
+    if (req.file) {
+      profileImage = await uploadImageAndGetUrl(req.file.path);
+    }
+
+    const user = updateUserModel(
+      {
+        ...parsed.data,
+        ...(profileImage && { profileImage }),
+      },
+      userId,
+    );
+
     const result = await updateUser(user);
 
     return res.status(200).json({
