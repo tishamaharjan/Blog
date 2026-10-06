@@ -4,7 +4,6 @@ import Home from "./pages/home";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Profile from "./pages/profile";
 import Login from "./components/Login";
-import AddBlog from "./pages/addblog";
 import Register from "./components/Register";
 import ThemeToggle from "./components/ui/ThemeToggle";
 
@@ -26,7 +25,6 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/addblog" element={<AddBlog />} />
         <Route path="/register" element={<Register />} />
       </Routes>
     </>

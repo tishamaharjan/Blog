@@ -49,7 +49,6 @@ const Button = ({
       className={`
         ${variantStyles[variant]}
         ${sizeStyles[size]}
-        w-full
         rounded-lg
         font-medium
         transition-all

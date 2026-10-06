@@ -65,29 +65,7 @@ const Home = () => {
     <div className="min-h-screen bg-[var(--color-bg)] px-4 py-6">
       <div className="flex flex-col gap-6">
         {blogs.map((blog) => (
-          <BlogCard key={blog.BlogID}>
-            <div className="flex flex-col gap-4">
-              <p className="text-xs font-medium text-[var(--color-secondary)]">
-                {blog.Username}
-              </p>
-
-              <p className="text-lg font-semibold text-[var(--color-text-primary)]">
-                {blog.BlogTitle}
-              </p>
-
-              <p className="text-base text-[var(--color-text-secondary)]">
-                {blog.BlogDetail}
-              </p>
-
-              {blog.BlogImage && (
-                <img
-                  src={blog.BlogImage}
-                  alt={blog.BlogDetail}
-                  className="w-full max-h-[350px] object-cover rounded-xl"
-                />
-              )}
-            </div>
-          </BlogCard>
+          <BlogCard key={blog.BlogID} blog={blog} />
         ))}
       </div>
     </div>

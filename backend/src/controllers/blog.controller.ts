@@ -7,6 +7,7 @@ import {
   deleteBlog,
   getAllBlogs,
   getBlogById,
+  getBlogsByUserId,
   updateBlog,
 } from "../services/blog.service.js";
 import { uploadImageAndGetUrl } from "../services/imageUpload.service.js";
@@ -84,6 +85,23 @@ export const getAllBlogsController = asyncHandler(
     return res.status(200).json({
       message: "Blogs fetched successfully.",
       data: result,
+    });
+  },
+);
+
+export const getBlogsByUserIdController = asyncHandler(
+  async (req: Request, res: Response) => {
+    const userId = Number(req.params.userId);
+
+    if (!Number.isInteger(userId)) {
+      throw new AppError("Invalid user ID", 400);
+    }
+
+    const blogs = await getBlogsByUserId(userId);
+
+    res.status(200).json({
+      success: true,
+      data: blogs,
     });
   },
 );
