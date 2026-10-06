@@ -1,12 +1,149 @@
 @import "tailwindcss";
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #eeefe0;
+
+  /* =========================
+     Light Theme
+     ========================= */
+
+  /* Backgrounds */
+  --color-bg: #f6f7fc;
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-text-primary: #29283d;
+  --color-text-secondary: #69687a;
+  --color-text-muted: #9998a9;
+
+  /* Primary - Blue Purple */
+  --color-primary: #6c63b5;
+  --color-primary-hover: #5c54a4;
+
+  /* Secondary - Soft Periwinkle */
+  --color-secondary: #8586c7;
+  --color-secondary-hover: #7274b8;
+
+  /* Borders */
+  --color-border: #ddddef;
+
+  /* Button colors */
+  --color-button: #6861b3;
+  --color-button-hover: #5750a1;
+
+  --color-add-button: #8586c7;
+  --color-add-button-hover: #7374b6;
+
+  --color-secondary-button: #e3e3f0;
+  --color-secondary-button-hover: #d4d4e5;
+
+  --color-danger-button: #d45f70;
+  --color-danger-button-hover: #c44e60;
+
+  /* Inputs */
+  --color-input-bg: #fbfbff;
+  --color-input-border: #d3d3e6;
+
+  /* Danger */
+  --color-danger: #d45f70;
+  --color-danger-bg: #fff0f2;
+  --color-danger-border: #edc5cc;
+
+  /* Navbar */
+  --color-navbar-bg: #7774b8;
+  --color-navbar-text: #ffffff;
+  --color-navbar-text-hover: #ffffff;
+
+  --color-navbar-hover: rgba(255, 255, 255, 0.16);
+
+  /* Shadow */
+  --color-shadow: rgba(73, 70, 130, 0.13);
+}
+
+/* =========================
+   Dark Theme
+   ========================= */
+
+[data-theme="dark"] {
+  /* Backgrounds */
+  --color-bg: #181923;
+  --color-surface: #242532;
+
+  /* Text */
+  --color-text-primary: #f4f3ff;
+  --color-text-secondary: #c6c5d4;
+  --color-text-muted: #8f8e9f;
+
+  /* Primary - Blue Violet */
+  --color-primary: #8b88d1;
+  --color-primary-hover: #9b98df;
+
+  /* Secondary - Periwinkle */
+  --color-secondary: #9698d5;
+  --color-secondary-hover: #aaa9e2;
+
+  /* Borders */
+  --color-border: #3d3d50;
+
+  /* Button colors */
+  --color-button: #817dcc;
+  --color-button-hover: #928edb;
+
+  --color-add-button: #9698d5;
+  --color-add-button-hover: #aaa9e2;
+
+  --color-secondary-button: #3d3d50;
+  --color-secondary-button-hover: #4a4a60;
+
+  --color-danger-button: #ed7484;
+  --color-danger-button-hover: #f18493;
+
+  /* Inputs */
+  --color-input-bg: #20212c;
+  --color-input-border: #4a4a60;
+
+  /* Danger */
+  --color-danger: #ed7484;
+  --color-danger-bg: #3d252b;
+  --color-danger-border: #64383f;
+
+  /* Navbar */
+  --color-navbar-bg: #34355f;
+  --color-navbar-text: #f7f6ff;
+  --color-navbar-text-hover: #ffffff;
+
+  --color-navbar-hover: rgba(255, 255, 255, 0.12);
+
+  /* Shadow */
+  --color-shadow: rgba(0, 0, 0, 0.35);
+}
+
+/* =========================
+   Global Elements
+   ========================= */
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
 }

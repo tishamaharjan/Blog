@@ -1,22 +1,60 @@
+import ThemeToggle from "../ui/ThemeToggle";
+
 const Navbar = () => {
   const elements = [
     { link: "/home", name: "Home" },
     { link: "/blog", name: "MyBlogs" },
     { link: "/profile", name: "Profile" },
   ];
+
   return (
-    <div className="bg-[#819A91] h-[50px] p-3 mb-5 flex justify-center">
+    <div className="h-16 bg-[var(--color-navbar-bg)] px-6 flex items-center shadow-sm sticky top-0 z-50">
       <div className="mr-auto"></div>
-      <div className="flex gap-10 justify-center">
+
+      <div className="flex items-center gap-8">
         {elements.map((element) => (
-          <a href={element.link} className="text-white hover:underline">
+          <a
+            key={element.link}
+            href={element.link}
+            className="
+              text-sm
+              font-medium
+              text-[var(--color-navbar-text)]
+              hover:text-[var(--color-navbar-text-hover)]
+              hover:bg-[var(--color-navbar-hover)]
+              px-3
+              py-2
+              rounded-lg
+              transition-all
+              duration-200
+            "
+          >
             {element.name}
           </a>
         ))}
       </div>
-      <a href="/" className="ml-auto text-white/80">
-        Logout
-      </a>
+
+      <div className="ml-auto flex items-center gap-2">
+        <a
+          href="/"
+          className="
+            text-sm
+            font-medium
+            text-[var(--color-navbar-text)]
+            hover:text-[var(--color-navbar-text-hover)]
+            hover:bg-[var(--color-navbar-hover)]
+            px-3
+            py-2
+            rounded-lg
+            transition-all
+            duration-200
+          "
+        >
+          Logout
+        </a>
+
+        <ThemeToggle />
+      </div>
     </div>
   );
 };

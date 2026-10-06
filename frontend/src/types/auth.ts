@@ -3,14 +3,14 @@ export interface LoginUser {
   password: string;
 }
 
-export interface RegisterUser {
+export type RegisterUser = {
   username: string;
   email: string;
   phoneNumber: string;
   dob: string;
-  profileImage: string;
   password: string;
-}
+  confirmPassword: string;
+};
 
 export interface UpdateProfile {
   username: string;

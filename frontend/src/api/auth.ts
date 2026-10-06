@@ -2,17 +2,17 @@ import type {
   ApiResponse,
   AuthResponse,
   LoginUser,
-  RegisterUser,
+  // RegisterUser,
 } from "../types/auth";
 import { apiClient } from "./client";
 
 export const authApi = {
-  register: (data: RegisterUser) =>
+  register: (data: FormData) =>
     apiClient<ApiResponse<{ username: string; email: string }>>(
       "/users/register",
       {
         method: "POST",
-        body: JSON.stringify(data),
+        body: data,
       },
     ),
 

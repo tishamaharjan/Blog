@@ -16,12 +16,18 @@ export async function apiClient<T>(
 ): Promise<T> {
   const { headers, ...rest } = options;
 
+  // FormData bodies must not carry an explicit Content-Type: the browser sets it
+  // together with the multipart boundary. Setting it by hand strips the boundary
+  // and the server cannot parse the parts.
+  const isFormData =
+    typeof FormData !== "undefined" && rest.body instanceof FormData;
+
   const res = await fetch(`${BASE_URL}${endpoint}`, {
     ...rest,
     // Must stay after `...rest` so callers cannot accidentally drop the auth cookie.
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
       ...headers,
     },
   });

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import BlogCard from "../components/ui/BlogCard";
+import BlogCard from "../components/BlogCard";
 
 type Blog = {
   BlogID: number;
   UserID: number;
+  Username: string;
+  BlogTitle: string;
   BlogDetail: string;
   BlogImage: string;
 };
@@ -44,28 +46,28 @@ const Home = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading blogs...</div>;
+    return (
+      <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-text-secondary)]">
+        Loading blogs...
+      </div>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-danger)]">
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div>
-      {blogs.map((blog) => (
-        <BlogCard key={blog.BlogID}>
-          <div>
-            <p>Blog Number: {blog.BlogID}</p>
-
-            <p>Blog is about: {blog.BlogDetail}</p>
-
-            {blog.BlogImage && (
-              <img src={blog.BlogImage} alt={blog.BlogDetail} />
-            )}
-          </div>
-        </BlogCard>
-      ))}
+    <div className="min-h-screen bg-[var(--color-bg)] px-4 py-6">
+      <div className="flex flex-col gap-6">
+        {blogs.map((blog) => (
+          <BlogCard key={blog.BlogID} blog={blog} />
+        ))}
+      </div>
     </div>
   );
 };
