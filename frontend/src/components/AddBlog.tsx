@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "./ui/Button";
 import { useToast } from "../context/ToastContext";
+import ImageUpload from "./ui/ImageUpload";
 
 type AddBlogProps = {
   userId: number;
@@ -61,31 +62,21 @@ const AddBlog = ({ userId, onBlogAdded }: AddBlogProps) => {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex flex-col gap-2 mx-auto border border-[var(--color-border)] p-6 sm:p-8 rounded-2xl bg-[var(--color-surface)] shadow-lg w-full max-w-xl"
+      className="flex flex-col gap-3 mx-auto border border-[var(--color-border)] p-6 sm:p-8 rounded-2xl bg-[var(--color-surface)] shadow-lg w-full max-w-xl"
     >
-      <label className="text-sm font-medium text-[var(--color-text-primary)]">
-        Description:
-      </label>
+      <ImageUpload variant="rectangle" value={image} onChange={setImage} />
+      <span>
+        <label className="text-sm font-medium text-[var(--color-text-primary)]">
+          About blog:
+        </label>
 
-      <textarea
-        className="px-3 py-2 rounded-lg border border-[var(--color-input-border)] w-full h-[140px] bg-[var(--color-input-bg)] text-[var(--color-text-primary)] outline-none resize-none transition focus:border-[var(--color-secondary)] focus:ring-2 focus:ring-[var(--color-secondary)]/20"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-      />
-
-      <label className="text-sm font-medium text-[var(--color-text-primary)] mt-2">
-        Image:
-      </label>
-
-      <input
-        className="w-full px-3 py-2 rounded-lg border border-[var(--color-input-border)] bg-[var(--color-input-bg)] text-sm text-[var(--color-text-secondary)] file:mr-3 file:border-0 file:rounded-md file:bg-[var(--color-secondary)] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-[var(--color-secondary-hover)] transition"
-        type="file"
-        name="Image"
-        accept="image/*"
-        onChange={(e) => setImage(e.target.files?.[0] ?? null)}
-        required
-      />
+        <textarea
+          className="px-3 py-2 rounded-lg border border-[var(--color-input-border)] w-full h-[140px] bg-[var(--color-input-bg)] text-[var(--color-text-primary)] outline-none resize-none transition focus:border-[var(--color-secondary)] focus:ring-2 focus:ring-[var(--color-secondary)]/20"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+      </span>
 
       <Button variant="add" type="submit" className="cursor-pointer mt-3 ">
         + Add Blog

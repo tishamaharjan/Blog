@@ -9,15 +9,7 @@ import { authApi } from "../api";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 import type { RegisterUser } from "../types/auth";
-
-// type FormData = {
-//   username: string;
-//   email: string;
-//   phoneNumber: string;
-//   dob: string;
-//   password: string;
-//   confirmPassword: string;
-// };
+import ImageUpload from "./ui/ImageUpload";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -108,6 +100,16 @@ const Register = () => {
           className="bg-[var(--color-surface)] flex flex-col gap-4 border border-[var(--color-border)] shadow-lg w-full p-6 sm:p-8 rounded-2xl"
         >
           <div>
+            <ImageUpload variant="circle" value={image} onChange={setImage} />
+
+            {!image && apiError === "Profile image is required." && (
+              <span className="text-[var(--color-danger)] text-xs text-left">
+                Profile image is required
+              </span>
+            )}
+          </div>
+
+          <div>
             <Input
               label="Username"
               type="text"
@@ -158,27 +160,6 @@ const Register = () => {
             {errors.dob && (
               <span className="text-[var(--color-danger)] text-xs text-left">
                 {errors.dob.message}
-              </span>
-            )}
-          </div>
-
-          <div>
-            <label className="text-sm font-medium text-[var(--color-text-primary)]">
-              Profile Image
-            </label>
-
-            <input
-              className="w-full px-3 py-2 rounded-lg border border-[var(--color-input-border)] bg-[var(--color-input-bg)] text-sm text-[var(--color-text-secondary)] file:mr-3 file:border-0 file:rounded-md file:bg-[var(--color-secondary)] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:bg-[var(--color-secondary-hover)] transition"
-              type="file"
-              name="profileImage"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files?.[0] ?? null)}
-              required
-            />
-
-            {!image && apiError === "Profile image is required." && (
-              <span className="text-[var(--color-danger)] text-xs text-left">
-                Profile image is required
               </span>
             )}
           </div>
