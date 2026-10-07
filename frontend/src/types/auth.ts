@@ -13,11 +13,10 @@ export type RegisterUser = {
 };
 
 export interface UpdateProfile {
+  userId: number;
   username: string;
-  email: string;
-  phoneNumber: string;
   dob: string;
-  profileImage?: string;
+  profileImage?: string | undefined;
 }
 
 export interface ChangePassword {

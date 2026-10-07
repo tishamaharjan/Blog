@@ -1,18 +1,13 @@
-import type {
-  ApiResponse,
-  ChangePassword,
-  CurrentUser,
-  UpdateProfile,
-} from "../types/auth";
+import type { ApiResponse, ChangePassword, CurrentUser } from "../types/auth";
 import { apiClient } from "./client";
 
 export const userApi = {
   getMe: () => apiClient<ApiResponse<CurrentUser>>("/users/me"),
 
-  updateProfile: (data: UpdateProfile) =>
+  updateProfile: (data: FormData) =>
     apiClient<ApiResponse<CurrentUser>>("/users/update-user", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: data,
     }),
 
   changePassword: (data: ChangePassword) =>

@@ -83,8 +83,6 @@ export async function updateUser(user: UpdateUserInput) {
       .request()
       .input("UserID", sql.Int, user.userId)
       .input("Username", sql.VarChar(255), user.username)
-      .input("Email", sql.VarChar(255), user.email)
-      .input("PhoneNumber", sql.VarChar(255), user.phoneNumber)
       .input("DOB", sql.VarChar(25), user.dob)
       .input("ProfileImage", sql.VarChar(255), user.profileImage)
       .execute("UpdateUser");
@@ -95,14 +93,6 @@ export async function updateUser(user: UpdateUserInput) {
 
     return toPublicUser(result.recordset[0]);
   } catch (e: any) {
-    if (e.message?.includes("Email already exists.")) {
-      throw new AppError("Email already registered.", 409);
-    }
-
-    if (e.message?.includes("Phone number already exists")) {
-      throw new AppError("Phone number already registered.", 409);
-    }
-
     if (SQL_UNIQUE_VIOLATION_CODES.has(e.number)) {
       throw new AppError("Duplicate value.", 409);
     }

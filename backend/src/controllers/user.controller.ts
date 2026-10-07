@@ -31,8 +31,6 @@ const CreateUserSchema = z.object({
 
 const UpdateUserSchema = z.object({
   username: z.string().min(3).max(255),
-  email: z.string().email(),
-  phoneNumber: z.string().min(7),
   dob: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: "Invalid date format",
   }),
@@ -138,16 +136,19 @@ export const updateUserController = asyncHandler(
       });
     }
 
-    let profileImage: string | undefined;
+    let profileImage: string | null | undefined;
 
     if (req.file) {
       profileImage = await uploadImageAndGetUrl(req.file.path);
+    } else {
+      const existing = await getUserById({ userId });
+      profileImage = existing.profileImage ?? undefined;
     }
 
     const user = updateUserModel(
       {
         ...parsed.data,
-        ...(profileImage && { profileImage }),
+        profileImage,
       },
       userId,
     );

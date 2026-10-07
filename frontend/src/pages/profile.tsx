@@ -54,7 +54,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] flex items-start justify-center px-4 py-10">
-      <ProfileCard userDetails={userDetails} />
+      <ProfileCard userDetails={userDetails} onUpdated={setUserDetails} />
     </div>
   );
 };
