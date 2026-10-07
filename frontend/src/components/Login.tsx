@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { authApi } from "../api";
 import Button from "./ui/Button";
@@ -12,7 +10,6 @@ type FormData = {
   password: string;
 };
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
@@ -79,20 +76,12 @@ const Login = () => {
           <div>
             <Input
               label="Password"
-              type={showPassword ? "text" : "password"}
+              type="password"
               placeholder="Enter your password"
               {...register("password", {
                 required: true,
               })}
-            >
-              <button
-                type="button"
-                className="h-full w-11 flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-              </button>
-            </Input>
+            ></Input>
 
             {errors.password && (
               <span className="text-[var(--color-danger)] text-xs text-left">

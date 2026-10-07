@@ -8,6 +8,10 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const handleProfileUpdated = (updatedUser: CurrentUser) => {
+    setUserDetails(updatedUser);
+  };
+
   useEffect(() => {
     const getUser = async () => {
       try {
@@ -54,7 +58,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] flex items-start justify-center px-4 py-10">
-      <ProfileCard userDetails={userDetails} onUpdated={setUserDetails} />
+      <ProfileCard userDetails={userDetails} onUpdated={handleProfileUpdated} />
     </div>
   );
 };
