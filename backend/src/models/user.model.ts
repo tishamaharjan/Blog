@@ -8,10 +8,8 @@ export type User = {
 };
 
 export type UpdateUser = {
-  username: string;
-  email: string;
-  phoneNumber: string;
-  dob: string;
+  username?: string;
+  dob?: string;
   profileImage?: string;
 };
 
@@ -52,8 +50,6 @@ export function updateUserModel(
   return {
     userId,
     username: userData.username,
-    email: userData.email,
-    phoneNumber: userData.phoneNumber,
     dob: userData.dob,
     profileImage: userData.profileImage,
   };

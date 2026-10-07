@@ -30,7 +30,12 @@ router.post(
 );
 router.get("/me", requireAuth, getCurrentUserController);
 router.get("/:id", requireAuth, getUserByIdController);
-router.post("/update-user", requireAuth, updateUserController);
+router.post(
+  "/update-user",
+  requireAuth,
+  uploadImage.single("profileImage"),
+  updateUserController,
+);
 router.post("/delete-user", requireAuth, deleteUserController);
 router.post("/change-password", requireAuth, changePasswordController);
 

@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { authApi } from "../api";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
@@ -37,8 +35,6 @@ const schema = z
   });
 
 const Register = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
   const [image, setImage] = useState<File | null>(null);
@@ -167,18 +163,10 @@ const Register = () => {
           <div>
             <Input
               label="Password"
-              type={showPassword ? "text" : "password"}
+              type="password"
               placeholder="Enter your password"
               {...register("password")}
-            >
-              <button
-                type="button"
-                className="h-full w-11 flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-              </button>
-            </Input>
+            ></Input>
 
             {errors.password && (
               <span className="text-[var(--color-danger)] text-xs text-left">
@@ -190,20 +178,10 @@ const Register = () => {
           <div>
             <Input
               label="Confirm Password"
-              type={showCurrentPassword ? "text" : "password"}
+              type="password"
               placeholder="Confirm your password"
               {...register("confirmPassword")}
-            >
-              <button
-                type="button"
-                className="h-full w-11 flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-secondary)] transition"
-                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-              >
-                <FontAwesomeIcon
-                  icon={showCurrentPassword ? faEyeSlash : faEye}
-                />
-              </button>
-            </Input>
+            ></Input>
 
             {errors.confirmPassword && (
               <span className="text-[var(--color-danger)] text-xs text-left">

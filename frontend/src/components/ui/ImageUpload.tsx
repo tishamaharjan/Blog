@@ -9,6 +9,7 @@ type ImageUploadProps = {
   onChange?: (file: File | null) => void;
   accept?: string;
   disabled?: boolean;
+  existingImageUrl?: string | null;
 };
 
 const ImageUpload = ({
@@ -17,6 +18,7 @@ const ImageUpload = ({
   onChange,
   accept = "image/*",
   disabled = false,
+  existingImageUrl = null,
 }: ImageUploadProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -65,7 +67,7 @@ const ImageUpload = ({
     handleFile(file);
   };
 
-  const imagePreview = preview || (value ? URL.createObjectURL(value) : null);
+  const imagePreview = preview || (value ? URL.createObjectURL(value) : null) || existingImageUrl;
 
   return (
     <div className="flex flex-col items-center gap-3">
