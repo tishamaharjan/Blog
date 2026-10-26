@@ -50,6 +50,29 @@ const EditProfileForm = ({
     },
   });
 
+  const handleDeleteProfile = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your profile? This action cannot be undone.",
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setIsSubmitting(true);
+      setApiError(null);
+
+      await userApi.deleteAccount();
+
+      showToast("Profile deleted successfully!", "success");
+
+      window.location.href = "/";
+    } catch (e) {
+      setApiError(e instanceof Error ? e.message : "Failed to delete profile");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const onSubmit = async (data: UpdateProfileForm) => {
     setApiError(null);
     setIsSubmitting(true);
@@ -84,6 +107,28 @@ const EditProfileForm = ({
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4 w-full"
     >
+      <div className="flex">
+        <Button
+          variant="secondary"
+          type="button"
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          Back
+        </Button>
+
+        <Button
+          className="ml-auto"
+          variant="danger"
+          type="button"
+          size="sm"
+          onClick={handleDeleteProfile}
+          disabled={isSubmitting}
+        >
+          Delete Profile
+        </Button>
+      </div>
+
       {/* Profile Image */}
       <div>
         <ImageUpload
