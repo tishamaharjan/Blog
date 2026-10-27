@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userApi } from "../api";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
+import { useToast } from "../context/ToastContext";
 
 const schema = z
   .object({
@@ -36,6 +37,8 @@ const ChangePasswordForm = ({ onCancel }: ChangePasswordFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
+  const { showToast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -54,11 +57,17 @@ const ChangePasswordForm = ({ onCancel }: ChangePasswordFormProps) => {
         currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       });
-
       reset();
+
+      showToast("Password changed successfully!", "success");
+
       onCancel();
     } catch (e) {
-      setApiError(e instanceof Error ? e.message : "Failed to change password");
+      const message =
+        e instanceof Error ? e.message : "Failed to change password";
+
+      setApiError(message);
+      showToast(message, "error");
     } finally {
       setIsSubmitting(false);
     }

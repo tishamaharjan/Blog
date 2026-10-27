@@ -2,19 +2,28 @@ import { useState } from "react";
 
 import NoProfileImage from "../assets/no-image.png";
 import type { CurrentUser } from "../types/auth";
+import { userApi } from "../api";
+import { useToast } from "../context/ToastContext";
 import Button from "./ui/Button";
 import EditProfileForm from "./EditProfileForm";
 import ChangePasswordForm from "./ChangePasswordForm";
 
+type ProfileCardProps = {
+  userDetails: CurrentUser;
+  onUpdated?: (user: CurrentUser) => void;
+  onDeleted?: () => void;
+};
+
 const ProfileCard = ({
   userDetails,
   onUpdated,
-}: {
-  userDetails: CurrentUser;
-  onUpdated?: (user: CurrentUser) => void;
-}) => {
+  onDeleted,
+}: ProfileCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isChangePw, setIsChangePw] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const { showToast } = useToast();
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -37,6 +46,31 @@ const ProfileCard = ({
 
   const handleCancelPassword = () => {
     setIsChangePw(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete your account? Your blogs, comments, and likes will also be permanently deleted. This action cannot be undone.",
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setIsDeleting(true);
+
+      await userApi.deleteAccount();
+
+      showToast("Account deleted successfully!", "success");
+
+      onDeleted?.();
+    } catch (error) {
+      showToast(
+        error instanceof Error ? error.message : "Failed to delete account",
+        "error",
+      );
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -88,11 +122,20 @@ const ProfileCard = ({
         )}
       </div>
 
-      {/* Change Password */}
+      {/* Profile Actions */}
       {!isEditing && !isChangePw && (
-        <div className="mt-6">
+        <div className="flex flex-col gap-3 mt-6">
           <Button variant="secondary" onClick={handleChangePassword}>
             Change Password
+          </Button>
+
+          <Button
+            variant="danger"
+            onClick={handleDeleteAccount}
+            loading={isDeleting}
+            disabled={isDeleting}
+          >
+            Delete Account
           </Button>
         </div>
       )}

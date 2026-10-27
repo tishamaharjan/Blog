@@ -7,15 +7,20 @@ const Profile = () => {
   const [userDetails, setUserDetails] = useState<CurrentUser | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [accountDeleted, setAccountDeleted] = useState(false);
 
   const handleProfileUpdated = (updatedUser: CurrentUser) => {
     setUserDetails(updatedUser);
   };
 
+  const handleAccountDeleted = () => {
+    setUserDetails(null);
+    setAccountDeleted(true);
+  };
+
   useEffect(() => {
     const getUser = async () => {
       try {
-        // The httpOnly cookie is the only auth state; the server resolves identity.
         const { data } = await userApi.getMe();
         setUserDetails(data);
       } catch (err) {
@@ -23,6 +28,7 @@ const Profile = () => {
           setError("Please log in to view your profile");
           return;
         }
+
         setError("Failed to load user details");
       } finally {
         setLoading(false);
@@ -36,6 +42,19 @@ const Profile = () => {
     return (
       <div className="min-h-screen bg-[var(--color-bg)] flex items-center justify-center text-[var(--color-text-secondary)]">
         Loading profile...
+      </div>
+    );
+  }
+
+  if (accountDeleted) {
+    return (
+      <div className="min-h-screen bg-[var(--color-bg)] flex flex-col items-center justify-center gap-4 text-[var(--color-text-primary)]">
+        <h2 className="text-xl font-semibold">
+          Your account has been deleted.
+        </h2>
+        <p className="text-[var(--color-text-secondary)]">
+          Thank you for using our application.
+        </p>
       </div>
     );
   }
@@ -58,7 +77,11 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-[var(--color-bg)] flex items-start justify-center px-4 py-10">
-      <ProfileCard userDetails={userDetails} onUpdated={handleProfileUpdated} />
+      <ProfileCard
+        userDetails={userDetails}
+        onUpdated={handleProfileUpdated}
+        onDeleted={handleAccountDeleted}
+      />
     </div>
   );
 };

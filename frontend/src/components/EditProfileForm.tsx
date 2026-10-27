@@ -84,6 +84,17 @@ const EditProfileForm = ({
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col gap-4 w-full"
     >
+      <div className="flex">
+        <Button
+          variant="secondary"
+          type="button"
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          Back
+        </Button>
+      </div>
+
       {/* Profile Image */}
       <div>
         <ImageUpload

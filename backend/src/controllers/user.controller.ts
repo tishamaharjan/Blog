@@ -61,7 +61,7 @@ export const registerUserController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -96,7 +96,7 @@ export const getUserByIdController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -131,7 +131,7 @@ export const updateUserController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -182,7 +182,7 @@ export const changePasswordController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }

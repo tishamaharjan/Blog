@@ -38,7 +38,7 @@ export const addCommentController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -59,7 +59,7 @@ export const getCommentByIdController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -80,7 +80,7 @@ export const updateCommentContoller = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -101,7 +101,7 @@ export const deleteCommentController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
