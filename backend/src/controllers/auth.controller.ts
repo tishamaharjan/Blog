@@ -26,7 +26,7 @@ export const loginUserController = asyncHandler(
 
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }

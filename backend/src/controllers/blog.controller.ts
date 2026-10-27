@@ -37,7 +37,7 @@ export const addBlogController = asyncHandler(
     const parsed = CreateBlogSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -64,7 +64,7 @@ export const getBlogByIdController = asyncHandler(
     const parsed = IdParamsSchema.safeParse(req.query);
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -111,7 +111,7 @@ export const updateBlogController = asyncHandler(
     const parsed = UpdateBlogSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
@@ -137,10 +137,10 @@ export const updateBlogController = asyncHandler(
 
 export const deleteBlogController = asyncHandler(
   async (req: Request, res: Response) => {
-    const parsed = IdParamsSchema.safeParse(req.query);
+    const parsed = IdParamsSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({
-        message: "Validation failed.",
+        message: "Invalid Input.",
         errors: parsed.error.flatten(),
       });
     }
